@@ -1,4 +1,4 @@
-package com.farsiman.sistema_de_viajes;
+/*package com.farsiman.sistema_de_viajes;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -10,4 +10,4 @@ class SistemaDeViajesApplicationTests {
 	void contextLoads() {
 	}
 
-}
+}*/

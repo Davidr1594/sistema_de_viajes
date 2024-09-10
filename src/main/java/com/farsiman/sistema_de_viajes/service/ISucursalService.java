@@ -9,7 +9,7 @@ import java.util.List;
  */
 public interface ISucursalService {
 
-    public List<Sucursal> getSucursal();
+    public List<Sucursal> getSucursales();
 
     public void saveSucursal(Sucursal sucursal);
 

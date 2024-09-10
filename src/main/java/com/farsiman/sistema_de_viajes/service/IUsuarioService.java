@@ -9,7 +9,7 @@ import java.util.List;
  */
 public interface IUsuarioService {
 
-    public List<Usuario> getUsuario();
+    public List<Usuario> getUsuarios();
 
     public void saveUsuario(Usuario usuario);
 

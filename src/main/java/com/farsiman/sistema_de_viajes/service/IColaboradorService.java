@@ -11,7 +11,7 @@ import java.util.List;
  */
 public interface IColaboradorService {
     
-    public List<Colaborador> getColaborador();
+    public List<Colaborador> getColaboradores();
 
     public void saveColaborador(Colaborador colaborador);
 

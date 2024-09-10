@@ -9,7 +9,7 @@ import java.util.List;
  */
 public interface ITransportistaService {
 
-    public List<Transportista> getTransportista();
+    public List<Transportista> getTransportistas();
 
     public void saveTransportista(Transportista transportista);
 

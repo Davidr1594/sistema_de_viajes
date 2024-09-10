@@ -38,7 +38,7 @@ public class ColaboradorServiceImpl implements IColaboradorService{
 
     @Override
     public void editColaborador(Colaborador colaborador) {
-
+        colaboradorRepo.save(colaborador);
     }
     
     

@@ -9,7 +9,7 @@ import java.util.List;
  */
 public interface IViajeService {
 
-    public List<Viaje> getViaje();
+    public List<Viaje> getViajes();
 
     public void saveViaje(Viaje viaje);
 

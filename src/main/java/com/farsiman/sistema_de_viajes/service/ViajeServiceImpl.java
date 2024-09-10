@@ -4,11 +4,13 @@ import com.farsiman.sistema_de_viajes.model.Viaje;
 import com.farsiman.sistema_de_viajes.repository.IViajeRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  *
  * @author david
  */
+@Service
 public class ViajeServiceImpl implements IViajeService {
 
     @Autowired

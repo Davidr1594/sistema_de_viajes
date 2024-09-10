@@ -4,11 +4,13 @@ import com.farsiman.sistema_de_viajes.model.SucursalColaborador;
 import com.farsiman.sistema_de_viajes.repository.ISucursalColaboradorRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  *
  * @author david
  */
+@Service
 public class SucursalColaboradorImpl implements ISucursalColaboradorService {
 
     @Autowired

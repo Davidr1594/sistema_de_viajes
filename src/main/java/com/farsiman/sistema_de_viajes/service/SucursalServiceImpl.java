@@ -1,13 +1,45 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package com.farsiman.sistema_de_viajes.service;
+
+import com.farsiman.sistema_de_viajes.model.Sucursal;
+import com.farsiman.sistema_de_viajes.repository.ISucursalRepository;
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  *
  * @author david
  */
-public class SucursalServiceImpl {
+@Service
+public class SucursalServiceImpl implements ISucursalService {
+    
+    @Autowired
+    ISucursalRepository sucursalRepo;
+
+    @Override
+    public List<Sucursal> getSucursales() {
+        return sucursalRepo.findAll();
+    }
+
+    @Override
+    public void saveSucursal(Sucursal sucursal) {
+        sucursalRepo.save(sucursal);
+    }
+
+    @Override
+    public void deleteSucursal(Long id) {
+        sucursalRepo.deleteById(id);
+    }
+
+    @Override
+    public Sucursal findSucursal(Long id) {
+        return sucursalRepo.findById(id).orElse(null);
+    }
+
+    @Override
+    public void editSucursal(Sucursal sucursal) {
+        sucursalRepo.save(sucursal);
+    }
     
 }
