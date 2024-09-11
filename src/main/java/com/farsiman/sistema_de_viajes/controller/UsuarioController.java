@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 public class UsuarioController {
     
     @Autowired
-    IUsuarioService usuarioService;
+    private IUsuarioService usuarioService;
     
     public boolean validUsuario(String nombre, String contrasenia){
         List<Usuario> listUsuarios = usuarioService.getUsuarios();

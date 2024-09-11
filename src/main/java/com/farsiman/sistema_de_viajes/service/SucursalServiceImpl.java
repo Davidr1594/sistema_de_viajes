@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 public class SucursalServiceImpl implements ISucursalService {
     
     @Autowired
-    ISucursalRepository sucursalRepo;
+    private ISucursalRepository sucursalRepo;
 
     @Override
     public List<Sucursal> getSucursales() {

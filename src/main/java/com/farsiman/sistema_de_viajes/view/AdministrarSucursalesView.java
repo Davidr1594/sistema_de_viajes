@@ -1,7 +1,17 @@
-
 package com.farsiman.sistema_de_viajes.view;
 
+import com.farsiman.sistema_de_viajes.controller.*;
+import com.farsiman.sistema_de_viajes.model.Colaborador;
+import com.farsiman.sistema_de_viajes.model.Sucursal;
+import jakarta.annotation.PostConstruct;
 import java.awt.Color;
+import java.util.List;
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 /**
@@ -11,12 +21,89 @@ import org.springframework.stereotype.Component;
 @Component
 public class AdministrarSucursalesView extends javax.swing.JFrame {
 
- 
+    @Autowired
+    private SucursalController sucursalControl;
+    @Autowired
+    private ColaboradorController colaboradorControl;
+    @Autowired
+    private SucursalColaboradorController sucursalColaboradorController;
+
+    @Autowired
+    ApplicationContext context;
+
+    private Long sucursalId;
+    private Long colaboradorId;
+
+    DefaultTableModel tableModel;
+
     public AdministrarSucursalesView() {
         initComponents();
         this.setLocationRelativeTo(null);
+
     }
 
+    @PostConstruct
+    private void initView() {
+        configureSucursalesTableHeader();
+        addSucursalesToTable();
+
+        configureColaboradoresTableHeader();
+        addColaboradoresToTable();
+    }
+
+    private void configureSucursalesTableHeader() {
+        JTableHeader header = sucursalesTable.getTableHeader();
+        header.setBackground(Color.gray);
+        tableModel = new DefaultTableModel();
+        sucursalesTable.setForeground(Color.white);
+        tableModel.addColumn("Id");
+        tableModel.addColumn("Nombre");
+        tableModel.addColumn("Direccion");
+
+        sucursalesTable.setModel(tableModel);
+    }
+
+    private void configureColaboradoresTableHeader() {
+        JTableHeader header = sucursalesTable.getTableHeader();
+        header.setBackground(Color.gray);
+        tableModel = new DefaultTableModel();
+        colaboradoresTable.setForeground(Color.white);
+        tableModel.addColumn("Id");
+        tableModel.addColumn("Nombre");
+        tableModel.addColumn("Apellido");
+
+        colaboradoresTable.setModel(tableModel);
+    }
+
+    private void addSucursalesToTable() {
+        List<Sucursal> listSucursales = sucursalControl.getSucursales();
+
+        for (Sucursal sucursal : listSucursales) {
+            tableModel.addRow(new Object[]{sucursal.getId(), sucursal.getNombre(), sucursal.getDireccion()});
+        }
+
+    }
+
+    private void addColaboradoresToTable() {
+        List<Colaborador> listColaboradores = colaboradorControl.getColaboradores();
+
+        for (Colaborador colaborador : listColaboradores) {
+            tableModel.addRow(new Object[]{colaborador.getId(), colaborador.getNombre(), colaborador.getApellido()});
+        }
+
+    }
+
+    public void showMessage(String message, String type, String title) {
+        JOptionPane optionPane = new JOptionPane(message);
+        if (type.equals("Info")) {
+            optionPane.setMessageType(JOptionPane.INFORMATION_MESSAGE);
+        } else if (type.equals("Error")) {
+            optionPane.setMessageType(JOptionPane.ERROR_MESSAGE);
+        }
+        JDialog dialog = optionPane.createDialog(title);
+        dialog.setAlwaysOnTop(true);
+        dialog.setVisible(true);
+    }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -27,7 +114,7 @@ public class AdministrarSucursalesView extends javax.swing.JFrame {
         tituloEsquinaLabel1 = new javax.swing.JLabel();
         tituloEsquinaLabel2 = new javax.swing.JLabel();
         usuarioLabel = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        usuarioTxtField = new javax.swing.JTextField();
         usuarioLabel1 = new javax.swing.JLabel();
         jTextField2 = new javax.swing.JTextField();
         menuDerechoPanel = new javax.swing.JPanel();
@@ -46,7 +133,7 @@ public class AdministrarSucursalesView extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         colaboradoresTable = new javax.swing.JTable();
         jScrollPane2 = new javax.swing.JScrollPane();
-        sucursalesTable1 = new javax.swing.JTable();
+        sucursalesTable = new javax.swing.JTable();
         colaboradorSeleccionadoLabel = new javax.swing.JLabel();
         textoInformaticoSeleccionLabel = new javax.swing.JLabel();
         sucursalSeleccionadaLabel = new javax.swing.JLabel();
@@ -79,12 +166,13 @@ public class AdministrarSucursalesView extends javax.swing.JFrame {
         usuarioLabel.setForeground(new java.awt.Color(204, 204, 204));
         usuarioLabel.setText("Usuario:");
 
-        jTextField1.setBackground(new java.awt.Color(51, 51, 51));
-        jTextField1.setForeground(new java.awt.Color(255, 255, 255));
-        jTextField1.setBorder(null);
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        usuarioTxtField.setEditable(false);
+        usuarioTxtField.setBackground(new java.awt.Color(51, 51, 51));
+        usuarioTxtField.setForeground(new java.awt.Color(255, 255, 255));
+        usuarioTxtField.setBorder(null);
+        usuarioTxtField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                usuarioTxtFieldActionPerformed(evt);
             }
         });
 
@@ -113,7 +201,7 @@ public class AdministrarSucursalesView extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(usuarioLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(usuarioTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(barraSuperiorPanelLayout.createSequentialGroup()
                         .addGap(738, 738, 738)
                         .addComponent(usuarioLabel1)
@@ -131,7 +219,7 @@ public class AdministrarSucursalesView extends javax.swing.JFrame {
             .addGroup(barraSuperiorPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(barraSuperiorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(usuarioTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(usuarioLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(barraSuperiorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -206,7 +294,7 @@ public class AdministrarSucursalesView extends javax.swing.JFrame {
             .addGroup(verAsignacionesBtnLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel2)
-                .addContainerGap(11, Short.MAX_VALUE))
+                .addContainerGap(21, Short.MAX_VALUE))
         );
         verAsignacionesBtnLayout.setVerticalGroup(
             verAsignacionesBtnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -225,6 +313,9 @@ public class AdministrarSucursalesView extends javax.swing.JFrame {
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 registrarViajesBtnMouseExited(evt);
+            }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                registrarViajesBtnMousePressed(evt);
             }
         });
 
@@ -347,7 +438,7 @@ public class AdministrarSucursalesView extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        background.add(menuDerechoPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 130, 110, 180));
+        background.add(menuDerechoPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 130, 120, 180));
 
         jLabel3.setBackground(new java.awt.Color(255, 255, 255));
         jLabel3.setFont(new java.awt.Font("Calibri Light", 1, 18)); // NOI18N
@@ -373,12 +464,17 @@ public class AdministrarSucursalesView extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        colaboradoresTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                colaboradoresTableMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(colaboradoresTable);
 
         background.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 80, 320, 220));
 
-        sucursalesTable1.setBackground(new java.awt.Color(51, 51, 51));
-        sucursalesTable1.setModel(new javax.swing.table.DefaultTableModel(
+        sucursalesTable.setBackground(new java.awt.Color(51, 51, 51));
+        sucursalesTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -389,7 +485,12 @@ public class AdministrarSucursalesView extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane2.setViewportView(sucursalesTable1);
+        sucursalesTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                sucursalesTableMouseClicked(evt);
+            }
+        });
+        jScrollPane2.setViewportView(sucursalesTable);
 
         background.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 80, 340, 220));
 
@@ -411,7 +512,9 @@ public class AdministrarSucursalesView extends javax.swing.JFrame {
         sucursalSeleccionadaLabel.setText("Sucursal:");
         background.add(sucursalSeleccionadaLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 340, -1, -1));
 
+        colaboradorSeleccionadoTxtField.setEditable(false);
         colaboradorSeleccionadoTxtField.setBackground(new java.awt.Color(51, 51, 51));
+        colaboradorSeleccionadoTxtField.setForeground(new java.awt.Color(255, 255, 255));
         colaboradorSeleccionadoTxtField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 colaboradorSeleccionadoTxtFieldActionPerformed(evt);
@@ -419,7 +522,9 @@ public class AdministrarSucursalesView extends javax.swing.JFrame {
         });
         background.add(colaboradorSeleccionadoTxtField, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 340, 130, 20));
 
+        sucursalSeleccionadaTxtField.setEditable(false);
         sucursalSeleccionadaTxtField.setBackground(new java.awt.Color(51, 51, 51));
+        sucursalSeleccionadaTxtField.setForeground(new java.awt.Color(255, 255, 255));
         background.add(sucursalSeleccionadaTxtField, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 340, 130, 20));
 
         kmLabel.setBackground(new java.awt.Color(255, 255, 255));
@@ -429,11 +534,17 @@ public class AdministrarSucursalesView extends javax.swing.JFrame {
         background.add(kmLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 370, -1, -1));
 
         kmTxtField.setBackground(new java.awt.Color(51, 51, 51));
+        kmTxtField.setForeground(new java.awt.Color(255, 255, 255));
         background.add(kmTxtField, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 370, 130, 20));
 
         asignarBtn.setBackground(new java.awt.Color(51, 51, 51));
         asignarBtn.setForeground(new java.awt.Color(102, 102, 102));
         asignarBtn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        asignarBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                asignarBtnMouseClicked(evt);
+            }
+        });
 
         ingresarLabel.setFont(new java.awt.Font("Calibri Light", 1, 14)); // NOI18N
         ingresarLabel.setForeground(new java.awt.Color(255, 255, 255));
@@ -520,13 +631,56 @@ public class AdministrarSucursalesView extends javax.swing.JFrame {
         verAsignacionesBtn.setBackground(new java.awt.Color(51, 51, 51));
     }//GEN-LAST:event_verAsignacionesBtnMouseExited
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void usuarioTxtFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usuarioTxtFieldActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    }//GEN-LAST:event_usuarioTxtFieldActionPerformed
 
     private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField2ActionPerformed
+
+    private void sucursalesTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_sucursalesTableMouseClicked
+        sucursalSeleccionadaTxtField.setText(String.valueOf(sucursalesTable.getValueAt(sucursalesTable.getSelectedRow(), 1)));
+        this.sucursalId = (Long) sucursalesTable.getValueAt(sucursalesTable.getSelectedRow(), 0);
+
+    }//GEN-LAST:event_sucursalesTableMouseClicked
+
+    private void colaboradoresTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_colaboradoresTableMouseClicked
+
+        colaboradorSeleccionadoTxtField.setText(String.valueOf(colaboradoresTable.getValueAt(colaboradoresTable.getSelectedRow(), 2)));
+        this.colaboradorId = (Long) colaboradoresTable.getValueAt(colaboradoresTable.getSelectedRow(), 0);
+
+    }//GEN-LAST:event_colaboradoresTableMouseClicked
+
+    private void asignarBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_asignarBtnMouseClicked
+        String sucursal = sucursalSeleccionadaTxtField.getText();
+        String colaborador = colaboradorSeleccionadoTxtField.getText();
+        String kmText = kmTxtField.getText(); // Capturar el texto del campo de kilómetros
+
+        if (!sucursal.equals("") && !colaborador.equals("")) {
+            if (!kmText.equals("")) { // Validar que el campo de kilómetros no esté vacío
+                try {
+                    double kms = Double.valueOf(kmText); // Intentar convertir a double
+
+                    sucursalColaboradorController.saveRelationSucursalColaborador(sucursalId, colaboradorId, kms);
+                    showMessage("Relacion asignada", "Info", "Completado");
+                } catch (NumberFormatException e) {
+                    showMessage("No es un número válido", "Error", "Dato incorrecto");
+                }
+            } else {
+                showMessage("Falta un campo por seleccionar", "Error", "Campos incompletos");
+            }
+        } else {
+            showMessage("Falta un campo", "Error", "Campos incompletos");
+        }
+
+
+    }//GEN-LAST:event_asignarBtnMouseClicked
+
+    private void registrarViajesBtnMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_registrarViajesBtnMousePressed
+        RegistrarViajesView registrarViajesView = context.getBean(RegistrarViajesView.class);
+        registrarViajesView.setVisible(true);
+    }//GEN-LAST:event_registrarViajesBtnMousePressed
 
     /**
      * @param args the command line arguments
@@ -580,7 +734,6 @@ public class AdministrarSucursalesView extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JLabel kmLabel;
     private javax.swing.JTextField kmTxtField;
@@ -590,12 +743,13 @@ public class AdministrarSucursalesView extends javax.swing.JFrame {
     private javax.swing.JLabel reportesLabel;
     private javax.swing.JLabel sucursalSeleccionadaLabel;
     private javax.swing.JTextField sucursalSeleccionadaTxtField;
-    private javax.swing.JTable sucursalesTable1;
+    private javax.swing.JTable sucursalesTable;
     private javax.swing.JLabel textoInformaticoSeleccionLabel;
     private javax.swing.JLabel tituloEsquinaLabel1;
     private javax.swing.JLabel tituloEsquinaLabel2;
     private javax.swing.JLabel usuarioLabel;
     private javax.swing.JLabel usuarioLabel1;
+    private javax.swing.JTextField usuarioTxtField;
     private javax.swing.JPanel verAsignacionesBtn;
     private javax.swing.JPanel verViajesBtn;
     // End of variables declaration//GEN-END:variables

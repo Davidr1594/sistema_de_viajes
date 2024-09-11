@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 public class ColaboradorServiceImpl implements IColaboradorService{
     
     @Autowired
-    IColaboradorRepository colaboradorRepo;
+    private IColaboradorRepository colaboradorRepo;
 
     @Override
     public List<Colaborador> getColaboradores() {

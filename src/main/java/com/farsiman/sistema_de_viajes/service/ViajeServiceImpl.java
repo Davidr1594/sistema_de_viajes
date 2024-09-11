@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 public class ViajeServiceImpl implements IViajeService {
 
     @Autowired
-    IViajeRepository viajeRepo;
+    private IViajeRepository viajeRepo;
 
     @Override
     public List<Viaje> getViajes() {

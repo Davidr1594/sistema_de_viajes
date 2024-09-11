@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 public class UsuarioServiceImpl implements IUsuarioService {
 
     @Autowired
-    IUsuarioRepository usuarioRepo;
+    private IUsuarioRepository usuarioRepo;
 
     @Override
     public List<Usuario> getUsuarios() {

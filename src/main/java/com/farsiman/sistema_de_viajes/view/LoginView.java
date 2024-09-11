@@ -2,7 +2,10 @@ package com.farsiman.sistema_de_viajes.view;
 
 import com.farsiman.sistema_de_viajes.controller.UsuarioController;
 import java.awt.Color;
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 /**
@@ -13,13 +16,26 @@ import org.springframework.stereotype.Component;
 public class LoginView extends javax.swing.JFrame {
 
     @Autowired
-    UsuarioController usuarioControl;
-    @Autowired
-    AdministrarSucursalesView administrarSucursalesView;
+    private UsuarioController usuarioControl;
 
+    @Autowired
+    private ApplicationContext context;
+    
     public LoginView() {
         initComponents();
         this.setLocationRelativeTo(null);
+    }
+    
+      public void showMessage(String message, String type, String title) {
+        JOptionPane optionPane = new JOptionPane(message);
+        if (type.equals("Info")) {
+            optionPane.setMessageType(JOptionPane.INFORMATION_MESSAGE);
+        } else if (type.equals("Error")) {
+            optionPane.setMessageType(JOptionPane.ERROR_MESSAGE);
+        }
+        JDialog dialog = optionPane.createDialog(title);
+        dialog.setAlwaysOnTop(true);
+        dialog.setVisible(true);
     }
 
     @SuppressWarnings("unchecked")
@@ -169,7 +185,7 @@ public class LoginView extends javax.swing.JFrame {
         if (String.valueOf(contraseniaTxtField.getPassword()).equals("**********")) {
             contraseniaTxtField.setText("");
             contraseniaTxtField.setForeground(Color.WHITE);
-        }
+        } 
         if (usuarioTxtField.getText().isEmpty()) {
             usuarioTxtField.setText("Ingrese su nombre de usuario");
             usuarioTxtField.setForeground(Color.GRAY);
@@ -184,9 +200,10 @@ public class LoginView extends javax.swing.JFrame {
         boolean result = usuarioControl.validUsuario(nombre, contrasenia);
 
         if (result) {
+            AdministrarSucursalesView administrarSucursalesView = context.getBean(AdministrarSucursalesView.class);
             administrarSucursalesView.setVisible(true);
             System.out.println("Se ha validado el usuario");
-        }
+        }else{showMessage("Usario o Contrasenia incorrectos", "Error", "Datos no válidos");}
 
     }//GEN-LAST:event_ingresarBtnMousePressed
 

@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 public class SucursalColaboradorImpl implements ISucursalColaboradorService {
 
     @Autowired
-    ISucursalColaboradorRepository sucursalColaboradorRepo;
+    private ISucursalColaboradorRepository sucursalColaboradorRepo;
 
     @Override
     public List<SucursalColaborador> getSucursalColaboradores() {
