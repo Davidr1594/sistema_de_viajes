@@ -1,12 +1,21 @@
 package com.farsiman.sistema_de_viajes.view;
 
+import com.farsiman.sistema_de_viajes.controller.UsuarioController;
 import java.awt.Color;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  *
  * @author david
  */
+@Component
 public class LoginView extends javax.swing.JFrame {
+
+    @Autowired
+    UsuarioController usuarioControl;
+    @Autowired
+    AdministrarSucursalesView administrarSucursalesView;
 
     public LoginView() {
         initComponents();
@@ -91,6 +100,11 @@ public class LoginView extends javax.swing.JFrame {
         ingresarBtn.setBackground(new java.awt.Color(51, 51, 51));
         ingresarBtn.setForeground(new java.awt.Color(102, 102, 102));
         ingresarBtn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        ingresarBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                ingresarBtnMousePressed(evt);
+            }
+        });
 
         ingresarLabel.setFont(new java.awt.Font("Calibri Light", 1, 14)); // NOI18N
         ingresarLabel.setForeground(new java.awt.Color(255, 255, 255));
@@ -162,6 +176,19 @@ public class LoginView extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_contraseniaTxtFieldMousePressed
+
+    private void ingresarBtnMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ingresarBtnMousePressed
+        String nombre = usuarioTxtField.getText();
+        String contrasenia = String.valueOf(contraseniaTxtField.getPassword());
+
+        boolean result = usuarioControl.validUsuario(nombre, contrasenia);
+
+        if (result) {
+            administrarSucursalesView.setVisible(true);
+            System.out.println("Se ha validado el usuario");
+        }
+
+    }//GEN-LAST:event_ingresarBtnMousePressed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */

@@ -2,11 +2,13 @@
 package com.farsiman.sistema_de_viajes.view;
 
 import java.awt.Color;
+import org.springframework.stereotype.Component;
 
 /**
  *
  * @author david
  */
+@Component
 public class ReportesView extends javax.swing.JFrame {
 
  
