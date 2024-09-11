@@ -5,11 +5,14 @@ import com.farsiman.sistema_de_viajes.model.Colaborador;
 import com.farsiman.sistema_de_viajes.repository.IColaboradorRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  *
  * @author david
  */
+
+@Service
 public class ColaboradorServiceImpl implements IColaboradorService{
     
     @Autowired
