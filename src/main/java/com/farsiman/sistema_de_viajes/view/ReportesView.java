@@ -115,6 +115,7 @@ public class ReportesView extends javax.swing.JFrame {
 
         menuDerechoPanel.setBackground(new java.awt.Color(51, 51, 51));
         menuDerechoPanel.setForeground(new java.awt.Color(51, 51, 51));
+        menuDerechoPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         asignarSucursalBtn.setBackground(new java.awt.Color(51, 51, 51));
         asignarSucursalBtn.setForeground(new java.awt.Color(51, 51, 51));
@@ -153,6 +154,8 @@ public class ReportesView extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        menuDerechoPanel.add(asignarSucursalBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 0, 108, -1));
+
         verAsignacionesBtn.setBackground(new java.awt.Color(51, 51, 51));
         verAsignacionesBtn.setForeground(new java.awt.Color(51, 51, 51));
         verAsignacionesBtn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -177,7 +180,7 @@ public class ReportesView extends javax.swing.JFrame {
             .addGroup(verAsignacionesBtnLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel2)
-                .addContainerGap(11, Short.MAX_VALUE))
+                .addContainerGap(21, Short.MAX_VALUE))
         );
         verAsignacionesBtnLayout.setVerticalGroup(
             verAsignacionesBtnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -186,6 +189,8 @@ public class ReportesView extends javax.swing.JFrame {
                 .addComponent(jLabel2)
                 .addContainerGap())
         );
+
+        menuDerechoPanel.add(verAsignacionesBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 40, 120, -1));
 
         registrarViajesBtn.setBackground(new java.awt.Color(51, 51, 51));
         registrarViajesBtn.setForeground(new java.awt.Color(51, 51, 51));
@@ -211,7 +216,7 @@ public class ReportesView extends javax.swing.JFrame {
             .addGroup(registrarViajesBtnLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel5)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(30, Short.MAX_VALUE))
         );
         registrarViajesBtnLayout.setVerticalGroup(
             registrarViajesBtnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -220,6 +225,8 @@ public class ReportesView extends javax.swing.JFrame {
                 .addComponent(jLabel5)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        menuDerechoPanel.add(registrarViajesBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 80, -1, -1));
 
         verViajesBtn.setBackground(new java.awt.Color(51, 51, 51));
         verViajesBtn.setForeground(new java.awt.Color(51, 51, 51));
@@ -255,6 +262,8 @@ public class ReportesView extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        menuDerechoPanel.add(verViajesBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 120, 120, -1));
+
         reportesBtn.setBackground(new java.awt.Color(51, 51, 51));
         reportesBtn.setForeground(new java.awt.Color(51, 51, 51));
         reportesBtn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -289,36 +298,9 @@ public class ReportesView extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        javax.swing.GroupLayout menuDerechoPanelLayout = new javax.swing.GroupLayout(menuDerechoPanel);
-        menuDerechoPanel.setLayout(menuDerechoPanelLayout);
-        menuDerechoPanelLayout.setHorizontalGroup(
-            menuDerechoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(asignarSucursalBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(verAsignacionesBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(verViajesBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(reportesBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, menuDerechoPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(registrarViajesBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-        menuDerechoPanelLayout.setVerticalGroup(
-            menuDerechoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(menuDerechoPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(asignarSucursalBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(verAsignacionesBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(registrarViajesBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(verViajesBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(reportesBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+        menuDerechoPanel.add(reportesBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 160, 120, -1));
 
-        background.add(menuDerechoPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 130, 110, 180));
+        background.add(menuDerechoPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 130, 120, 210));
 
         colaboradoresTable.setBackground(new java.awt.Color(51, 51, 51));
         colaboradoresTable.setModel(new javax.swing.table.DefaultTableModel(

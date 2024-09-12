@@ -11,6 +11,8 @@ import com.farsiman.sistema_de_viajes.model.Transportista;
 import jakarta.annotation.PostConstruct;
 import java.awt.Color;
 import java.util.List;
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
@@ -36,6 +38,8 @@ public class RegistrarViajesView extends javax.swing.JFrame {
 
     //variable sucursal global
     Sucursal sucursalSeleccionadaGlobal;
+    //Variable para acumular y restringir los Kms de un viaje
+    double kmsAcumulados = 0.0;
 
     DefaultTableModel tableModel = new DefaultTableModel();
     DefaultTableModel tableModelColaboradoresSeleccionados = new DefaultTableModel();
@@ -91,6 +95,18 @@ public class RegistrarViajesView extends javax.swing.JFrame {
         tableModelColaboradoresSeleccionados.addColumn("Apellido");
 
         colaboradoresSeleccionadostable.setModel(tableModelColaboradoresSeleccionados);
+    }
+
+    private void showMessage(String message, String type, String title) {
+        JOptionPane optionPane = new JOptionPane(message);
+        if (type.equals("Info")) {
+            optionPane.setMessageType(JOptionPane.INFORMATION_MESSAGE);
+        } else if (type.equals("Error")) {
+            optionPane.setMessageType(JOptionPane.ERROR_MESSAGE);
+        }
+        JDialog dialog = optionPane.createDialog(title);
+        dialog.setAlwaysOnTop(true);
+        dialog.setVisible(true);
     }
 
     @SuppressWarnings("unchecked")
@@ -196,6 +212,7 @@ public class RegistrarViajesView extends javax.swing.JFrame {
 
         menuDerechoPanel.setBackground(new java.awt.Color(51, 51, 51));
         menuDerechoPanel.setForeground(new java.awt.Color(51, 51, 51));
+        menuDerechoPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         asignarSucursalBtn.setBackground(new java.awt.Color(51, 51, 51));
         asignarSucursalBtn.setForeground(new java.awt.Color(51, 51, 51));
@@ -234,6 +251,8 @@ public class RegistrarViajesView extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        menuDerechoPanel.add(asignarSucursalBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 120, -1));
+
         verAsignacionesBtn.setBackground(new java.awt.Color(51, 51, 51));
         verAsignacionesBtn.setForeground(new java.awt.Color(51, 51, 51));
         verAsignacionesBtn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -267,6 +286,8 @@ public class RegistrarViajesView extends javax.swing.JFrame {
                 .addComponent(jLabel2)
                 .addContainerGap())
         );
+
+        menuDerechoPanel.add(verAsignacionesBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 40, -1, -1));
 
         registrarViajesBtn.setBackground(new java.awt.Color(51, 51, 51));
         registrarViajesBtn.setForeground(new java.awt.Color(51, 51, 51));
@@ -302,6 +323,8 @@ public class RegistrarViajesView extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        menuDerechoPanel.add(registrarViajesBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 80, 120, -1));
+
         verViajesBtn.setBackground(new java.awt.Color(51, 51, 51));
         verViajesBtn.setForeground(new java.awt.Color(51, 51, 51));
         verViajesBtn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -335,6 +358,8 @@ public class RegistrarViajesView extends javax.swing.JFrame {
                 .addComponent(jLabel6)
                 .addContainerGap())
         );
+
+        menuDerechoPanel.add(verViajesBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 120, 120, -1));
 
         reportesBtn.setBackground(new java.awt.Color(51, 51, 51));
         reportesBtn.setForeground(new java.awt.Color(51, 51, 51));
@@ -370,36 +395,9 @@ public class RegistrarViajesView extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        javax.swing.GroupLayout menuDerechoPanelLayout = new javax.swing.GroupLayout(menuDerechoPanel);
-        menuDerechoPanel.setLayout(menuDerechoPanelLayout);
-        menuDerechoPanelLayout.setHorizontalGroup(
-            menuDerechoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(asignarSucursalBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(verAsignacionesBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(verViajesBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(reportesBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, menuDerechoPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(registrarViajesBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-        menuDerechoPanelLayout.setVerticalGroup(
-            menuDerechoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(menuDerechoPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(asignarSucursalBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(verAsignacionesBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(registrarViajesBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(verViajesBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(reportesBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+        menuDerechoPanel.add(reportesBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 160, 120, -1));
 
-        background.add(menuDerechoPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 130, 120, 190));
+        background.add(menuDerechoPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 130, 120, 200));
 
         colaboradoresSeleccionadosLabel.setBackground(new java.awt.Color(255, 255, 255));
         colaboradoresSeleccionadosLabel.setFont(new java.awt.Font("Calibri Light", 1, 18)); // NOI18N
@@ -636,36 +634,41 @@ public class RegistrarViajesView extends javax.swing.JFrame {
     }//GEN-LAST:event_buscaBtnMouseClicked
     }
     private void colaboradoresTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_colaboradoresTableMouseClicked
-Long colaboradorSucursalId = (Long) colaboradoresTable.getValueAt(colaboradoresTable.getSelectedRow(), 0);
+// Obtener el ID del colaborador seleccionado de la tabla de colaboradores
+        Long colaboradorSucursalId = (Long) colaboradoresTable.getValueAt(colaboradoresTable.getSelectedRow(), 0);
 
-// Verificar si el colaborador ya existe en la tabla de colaboradores seleccionados
-boolean exists = false;
-for (int i = 0; i < tableModelColaboradoresSeleccionados.getRowCount(); i++) {
-    Long idEnTabla = (Long) tableModelColaboradoresSeleccionados.getValueAt(i, 0); // Columna del ID del colaborador
-    if (idEnTabla != null && idEnTabla.equals(colaboradorSucursalId)) {
-        exists = true;
-        break; // Si ya existe, detener el ciclo
-    }
-}
+// Obtener el objeto SucursalColaborador
+        SucursalColaborador sucursalColaborador = sucursalColaboradorControl.getSucursalColaboradorByIdSucursal(colaboradorSucursalId);
 
-// Solo agregar si el colaborador no está en la tabla
-if (!exists) {
-    // Obtener el colaborador desde el controlador usando el ID seleccionado
-    SucursalColaborador sucursalColaborador = sucursalColaboradorControl.getSucursalColaboradorByIdSucursal(colaboradorSucursalId);
+        if (sucursalColaborador != null) {
+            Long colaboradorId = sucursalColaborador.getColaborador().getId();
 
-    if (sucursalColaborador != null) {
-        // Agregar los datos del colaborador a la tabla de seleccionados
-        tableModelColaboradoresSeleccionados.addRow(new Object[]{
-            sucursalColaborador.getColaborador().getId(),
-            sucursalColaborador.getColaborador().getNombre(),
-            sucursalColaborador.getColaborador().getApellido()
-        });
-    } else {
-        System.out.println("El colaborador seleccionado no existe en el controlador.");
-    }
-} else {
-    System.out.println("El colaborador ya está en la tabla de seleccionados.");
-}
+            // Verificar si el colaborador ya está en la tabla de seleccionados
+            boolean exists = false;
+            for (int i = 0; i < tableModelColaboradoresSeleccionados.getRowCount(); i++) {
+                Long idEnTabla = (Long) tableModelColaboradoresSeleccionados.getValueAt(i, 0);
+                if (colaboradorId.equals(idEnTabla)) {
+                    exists = true;
+                    break;
+                }
+            }
+
+            // Si no existe, agregar a la tabla de seleccionados
+            if (!exists) {
+                if ((kmsAcumulados + sucursalColaborador.getDistancia()) <= 100) {
+                    kmsAcumulados = kmsAcumulados + sucursalColaborador.getDistancia();
+                    kmTxtField.setText(String.valueOf(kmsAcumulados));
+
+                    tableModelColaboradoresSeleccionados.addRow(new Object[]{
+                        colaboradorId,
+                        sucursalColaborador.getColaborador().getNombre(),
+                        sucursalColaborador.getColaborador().getApellido()
+                    });
+                } else {
+                    showMessage("Se excede la cantidad de Kms permitidos para el viaje, tiene que ser menor a 100 kms", "Warning", "No se agrego Colaborador");
+                }
+            }
+        }
     }//GEN-LAST:event_colaboradoresTableMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
