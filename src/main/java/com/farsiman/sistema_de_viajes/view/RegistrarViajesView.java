@@ -18,6 +18,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableModel;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 /**
@@ -35,6 +36,8 @@ public class RegistrarViajesView extends javax.swing.JFrame {
     TransportistaController transportistaControl;
     @Autowired
     SucursalColaboradorController sucursalColaboradorControl;
+    @Autowired
+    ApplicationContext context;
 
     //variable sucursal global
     Sucursal sucursalSeleccionadaGlobal;
@@ -119,17 +122,6 @@ public class RegistrarViajesView extends javax.swing.JFrame {
         tituloEsquinaLabel2 = new javax.swing.JLabel();
         usuarioLabel = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
-        menuDerechoPanel = new javax.swing.JPanel();
-        asignarSucursalBtn = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        verAsignacionesBtn = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
-        registrarViajesBtn = new javax.swing.JPanel();
-        jLabel5 = new javax.swing.JLabel();
-        verViajesBtn = new javax.swing.JPanel();
-        jLabel6 = new javax.swing.JLabel();
-        reportesBtn = new javax.swing.JPanel();
-        reportesLabel = new javax.swing.JLabel();
         colaboradoresSeleccionadosLabel = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         colaboradoresSeleccionadostable = new javax.swing.JTable();
@@ -147,6 +139,13 @@ public class RegistrarViajesView extends javax.swing.JFrame {
         buscaBtn = new javax.swing.JPanel();
         buscarLabel = new javax.swing.JLabel();
         SucursalesSeleccionadosLabel = new javax.swing.JLabel();
+        menuDerechoPanel = new javax.swing.JPanel();
+        asignarSucursalBtn = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        registrarViajesBtn = new javax.swing.JPanel();
+        jLabel5 = new javax.swing.JLabel();
+        reportesBtn = new javax.swing.JPanel();
+        reportesLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -185,9 +184,9 @@ public class RegistrarViajesView extends javax.swing.JFrame {
             barraSuperiorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(barraSuperiorPanelLayout.createSequentialGroup()
                 .addComponent(tituloEsquinaLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(174, 174, 174)
+                .addGap(162, 162, 162)
                 .addComponent(tituloEsquinaLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 210, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 222, Short.MAX_VALUE)
                 .addComponent(usuarioLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -196,213 +195,24 @@ public class RegistrarViajesView extends javax.swing.JFrame {
         barraSuperiorPanelLayout.setVerticalGroup(
             barraSuperiorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(barraSuperiorPanelLayout.createSequentialGroup()
-                .addComponent(tituloEsquinaLabel1)
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(barraSuperiorPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(barraSuperiorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(barraSuperiorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(usuarioLabel))
-                    .addComponent(tituloEsquinaLabel2))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(barraSuperiorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(usuarioLabel))
+                .addContainerGap(8, Short.MAX_VALUE))
+            .addGroup(barraSuperiorPanelLayout.createSequentialGroup()
+                .addGroup(barraSuperiorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(tituloEsquinaLabel1)
+                    .addComponent(tituloEsquinaLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         background.add(barraSuperiorPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 880, 30));
 
-        menuDerechoPanel.setBackground(new java.awt.Color(51, 51, 51));
-        menuDerechoPanel.setForeground(new java.awt.Color(51, 51, 51));
-        menuDerechoPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        asignarSucursalBtn.setBackground(new java.awt.Color(51, 51, 51));
-        asignarSucursalBtn.setForeground(new java.awt.Color(51, 51, 51));
-        asignarSucursalBtn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        asignarSucursalBtn.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                asignarSucursalBtnMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                asignarSucursalBtnMouseExited(evt);
-            }
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                asignarSucursalBtnMousePressed(evt);
-            }
-        });
-
-        jLabel1.setBackground(new java.awt.Color(204, 204, 204));
-        jLabel1.setForeground(new java.awt.Color(204, 204, 204));
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Asignar Sucursal");
-
-        javax.swing.GroupLayout asignarSucursalBtnLayout = new javax.swing.GroupLayout(asignarSucursalBtn);
-        asignarSucursalBtn.setLayout(asignarSucursalBtnLayout);
-        asignarSucursalBtnLayout.setHorizontalGroup(
-            asignarSucursalBtnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(asignarSucursalBtnLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        asignarSucursalBtnLayout.setVerticalGroup(
-            asignarSucursalBtnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, asignarSucursalBtnLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addContainerGap())
-        );
-
-        menuDerechoPanel.add(asignarSucursalBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 120, -1));
-
-        verAsignacionesBtn.setBackground(new java.awt.Color(51, 51, 51));
-        verAsignacionesBtn.setForeground(new java.awt.Color(51, 51, 51));
-        verAsignacionesBtn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        verAsignacionesBtn.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                verAsignacionesBtnMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                verAsignacionesBtnMouseExited(evt);
-            }
-        });
-
-        jLabel2.setBackground(new java.awt.Color(204, 204, 204));
-        jLabel2.setForeground(new java.awt.Color(204, 204, 204));
-        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel2.setText("Ver Asignaciones");
-
-        javax.swing.GroupLayout verAsignacionesBtnLayout = new javax.swing.GroupLayout(verAsignacionesBtn);
-        verAsignacionesBtn.setLayout(verAsignacionesBtnLayout);
-        verAsignacionesBtnLayout.setHorizontalGroup(
-            verAsignacionesBtnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(verAsignacionesBtnLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel2)
-                .addContainerGap(21, Short.MAX_VALUE))
-        );
-        verAsignacionesBtnLayout.setVerticalGroup(
-            verAsignacionesBtnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, verAsignacionesBtnLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel2)
-                .addContainerGap())
-        );
-
-        menuDerechoPanel.add(verAsignacionesBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 40, -1, -1));
-
-        registrarViajesBtn.setBackground(new java.awt.Color(51, 51, 51));
-        registrarViajesBtn.setForeground(new java.awt.Color(51, 51, 51));
-        registrarViajesBtn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        registrarViajesBtn.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                registrarViajesBtnMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                registrarViajesBtnMouseExited(evt);
-            }
-        });
-
-        jLabel5.setBackground(new java.awt.Color(204, 204, 204));
-        jLabel5.setForeground(new java.awt.Color(204, 204, 204));
-        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel5.setText("Registrar Viajes");
-
-        javax.swing.GroupLayout registrarViajesBtnLayout = new javax.swing.GroupLayout(registrarViajesBtn);
-        registrarViajesBtn.setLayout(registrarViajesBtnLayout);
-        registrarViajesBtnLayout.setHorizontalGroup(
-            registrarViajesBtnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(registrarViajesBtnLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel5)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        registrarViajesBtnLayout.setVerticalGroup(
-            registrarViajesBtnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(registrarViajesBtnLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel5)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        menuDerechoPanel.add(registrarViajesBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 80, 120, -1));
-
-        verViajesBtn.setBackground(new java.awt.Color(51, 51, 51));
-        verViajesBtn.setForeground(new java.awt.Color(51, 51, 51));
-        verViajesBtn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        verViajesBtn.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                verViajesBtnMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                verViajesBtnMouseExited(evt);
-            }
-        });
-
-        jLabel6.setBackground(new java.awt.Color(204, 204, 204));
-        jLabel6.setForeground(new java.awt.Color(204, 204, 204));
-        jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel6.setText("Ver Viajes");
-
-        javax.swing.GroupLayout verViajesBtnLayout = new javax.swing.GroupLayout(verViajesBtn);
-        verViajesBtn.setLayout(verViajesBtnLayout);
-        verViajesBtnLayout.setHorizontalGroup(
-            verViajesBtnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(verViajesBtnLayout.createSequentialGroup()
-                .addGap(24, 24, 24)
-                .addComponent(jLabel6)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        verViajesBtnLayout.setVerticalGroup(
-            verViajesBtnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, verViajesBtnLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel6)
-                .addContainerGap())
-        );
-
-        menuDerechoPanel.add(verViajesBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 120, 120, -1));
-
-        reportesBtn.setBackground(new java.awt.Color(51, 51, 51));
-        reportesBtn.setForeground(new java.awt.Color(51, 51, 51));
-        reportesBtn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        reportesBtn.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                reportesBtnMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                reportesBtnMouseExited(evt);
-            }
-        });
-
-        reportesLabel.setBackground(new java.awt.Color(204, 204, 204));
-        reportesLabel.setForeground(new java.awt.Color(204, 204, 204));
-        reportesLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        reportesLabel.setText("Reportes");
-
-        javax.swing.GroupLayout reportesBtnLayout = new javax.swing.GroupLayout(reportesBtn);
-        reportesBtn.setLayout(reportesBtnLayout);
-        reportesBtnLayout.setHorizontalGroup(
-            reportesBtnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(reportesBtnLayout.createSequentialGroup()
-                .addGap(26, 26, 26)
-                .addComponent(reportesLabel)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        reportesBtnLayout.setVerticalGroup(
-            reportesBtnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(reportesBtnLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(reportesLabel)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        menuDerechoPanel.add(reportesBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 160, 120, -1));
-
-        background.add(menuDerechoPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 130, 120, 200));
-
         colaboradoresSeleccionadosLabel.setBackground(new java.awt.Color(255, 255, 255));
         colaboradoresSeleccionadosLabel.setFont(new java.awt.Font("Calibri Light", 1, 18)); // NOI18N
         colaboradoresSeleccionadosLabel.setForeground(new java.awt.Color(204, 204, 204));
-        colaboradoresSeleccionadosLabel.setText("Colaboradores Seleccionados");
+        colaboradoresSeleccionadosLabel.setText("Colaboradores seleccionados para el viaje");
         background.add(colaboradoresSeleccionadosLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 200, -1, 20));
 
         colaboradoresSeleccionadostable.setBackground(new java.awt.Color(51, 51, 51));
@@ -542,7 +352,130 @@ public class RegistrarViajesView extends javax.swing.JFrame {
         SucursalesSeleccionadosLabel.setFont(new java.awt.Font("Calibri Light", 1, 18)); // NOI18N
         SucursalesSeleccionadosLabel.setForeground(new java.awt.Color(204, 204, 204));
         SucursalesSeleccionadosLabel.setText("Seleccione la Sucursal:");
-        background.add(SucursalesSeleccionadosLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 50, -1, 20));
+        background.add(SucursalesSeleccionadosLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 50, -1, 20));
+
+        menuDerechoPanel.setBackground(new java.awt.Color(51, 51, 51));
+        menuDerechoPanel.setForeground(new java.awt.Color(51, 51, 51));
+        menuDerechoPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        asignarSucursalBtn.setBackground(new java.awt.Color(51, 51, 51));
+        asignarSucursalBtn.setForeground(new java.awt.Color(51, 51, 51));
+        asignarSucursalBtn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        asignarSucursalBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                asignarSucursalBtnMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                asignarSucursalBtnMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                asignarSucursalBtnMouseExited(evt);
+            }
+        });
+
+        jLabel1.setBackground(new java.awt.Color(204, 204, 204));
+        jLabel1.setForeground(new java.awt.Color(204, 204, 204));
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("Asignar Sucursal");
+
+        javax.swing.GroupLayout asignarSucursalBtnLayout = new javax.swing.GroupLayout(asignarSucursalBtn);
+        asignarSucursalBtn.setLayout(asignarSucursalBtnLayout);
+        asignarSucursalBtnLayout.setHorizontalGroup(
+            asignarSucursalBtnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(asignarSucursalBtnLayout.createSequentialGroup()
+                .addGap(14, 14, 14)
+                .addComponent(jLabel1)
+                .addContainerGap(14, Short.MAX_VALUE))
+        );
+        asignarSucursalBtnLayout.setVerticalGroup(
+            asignarSucursalBtnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(asignarSucursalBtnLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        menuDerechoPanel.add(asignarSucursalBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 120, -1));
+
+        registrarViajesBtn.setBackground(new java.awt.Color(51, 51, 51));
+        registrarViajesBtn.setForeground(new java.awt.Color(51, 51, 51));
+        registrarViajesBtn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        registrarViajesBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                registrarViajesBtnMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                registrarViajesBtnMouseExited(evt);
+            }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                registrarViajesBtnMousePressed(evt);
+            }
+        });
+
+        jLabel5.setBackground(new java.awt.Color(204, 204, 204));
+        jLabel5.setForeground(new java.awt.Color(204, 204, 204));
+        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel5.setText("Registrar Viajes");
+
+        javax.swing.GroupLayout registrarViajesBtnLayout = new javax.swing.GroupLayout(registrarViajesBtn);
+        registrarViajesBtn.setLayout(registrarViajesBtnLayout);
+        registrarViajesBtnLayout.setHorizontalGroup(
+            registrarViajesBtnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(registrarViajesBtnLayout.createSequentialGroup()
+                .addGap(14, 14, 14)
+                .addComponent(jLabel5)
+                .addContainerGap(22, Short.MAX_VALUE))
+        );
+        registrarViajesBtnLayout.setVerticalGroup(
+            registrarViajesBtnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(registrarViajesBtnLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        menuDerechoPanel.add(registrarViajesBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 40, 120, -1));
+
+        reportesBtn.setBackground(new java.awt.Color(51, 51, 51));
+        reportesBtn.setForeground(new java.awt.Color(51, 51, 51));
+        reportesBtn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        reportesBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                reportesBtnMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                reportesBtnMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                reportesBtnMouseExited(evt);
+            }
+        });
+
+        reportesLabel.setBackground(new java.awt.Color(204, 204, 204));
+        reportesLabel.setForeground(new java.awt.Color(204, 204, 204));
+        reportesLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        reportesLabel.setText("Reportes");
+
+        javax.swing.GroupLayout reportesBtnLayout = new javax.swing.GroupLayout(reportesBtn);
+        reportesBtn.setLayout(reportesBtnLayout);
+        reportesBtnLayout.setHorizontalGroup(
+            reportesBtnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(reportesBtnLayout.createSequentialGroup()
+                .addGap(26, 26, 26)
+                .addComponent(reportesLabel)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        reportesBtnLayout.setVerticalGroup(
+            reportesBtnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(reportesBtnLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(reportesLabel)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        menuDerechoPanel.add(reportesBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 80, 120, -1));
+
+        background.add(menuDerechoPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 180, 120, 120));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -552,55 +485,11 @@ public class RegistrarViajesView extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(background, javax.swing.GroupLayout.DEFAULT_SIZE, 468, Short.MAX_VALUE)
+            .addComponent(background, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void asignarSucursalBtnMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_asignarSucursalBtnMousePressed
-
-    }//GEN-LAST:event_asignarSucursalBtnMousePressed
-
-    private void asignarSucursalBtnMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_asignarSucursalBtnMouseEntered
-        asignarSucursalBtn.setBackground(Color.gray);
-    }//GEN-LAST:event_asignarSucursalBtnMouseEntered
-
-    private void asignarSucursalBtnMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_asignarSucursalBtnMouseExited
-        asignarSucursalBtn.setBackground(new java.awt.Color(51, 51, 51));
-    }//GEN-LAST:event_asignarSucursalBtnMouseExited
-
-    private void verAsignacionesBtnMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_verAsignacionesBtnMouseEntered
-        verAsignacionesBtn.setBackground(Color.gray);
-    }//GEN-LAST:event_verAsignacionesBtnMouseEntered
-
-    private void registrarViajesBtnMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_registrarViajesBtnMouseEntered
-        registrarViajesBtn.setBackground(Color.gray);
-    }//GEN-LAST:event_registrarViajesBtnMouseEntered
-
-    private void registrarViajesBtnMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_registrarViajesBtnMouseExited
-        registrarViajesBtn.setBackground(new java.awt.Color(51, 51, 51));
-    }//GEN-LAST:event_registrarViajesBtnMouseExited
-
-    private void verViajesBtnMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_verViajesBtnMouseEntered
-        verViajesBtn.setBackground(Color.gray);
-    }//GEN-LAST:event_verViajesBtnMouseEntered
-
-    private void verViajesBtnMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_verViajesBtnMouseExited
-        verViajesBtn.setBackground(new java.awt.Color(51, 51, 51));
-    }//GEN-LAST:event_verViajesBtnMouseExited
-
-    private void reportesBtnMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_reportesBtnMouseEntered
-        reportesBtn.setBackground(Color.gray);
-    }//GEN-LAST:event_reportesBtnMouseEntered
-
-    private void reportesBtnMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_reportesBtnMouseExited
-        reportesBtn.setBackground(new java.awt.Color(51, 51, 51));
-    }//GEN-LAST:event_reportesBtnMouseExited
-
-    private void verAsignacionesBtnMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_verAsignacionesBtnMouseExited
-        verAsignacionesBtn.setBackground(new java.awt.Color(51, 51, 51));
-    }//GEN-LAST:event_verAsignacionesBtnMouseExited
 
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
         // TODO add your handling code here:
@@ -665,11 +554,56 @@ public class RegistrarViajesView extends javax.swing.JFrame {
                         sucursalColaborador.getColaborador().getApellido()
                     });
                 } else {
-                    showMessage("Se excede la cantidad de Kms permitidos para el viaje, tiene que ser menor a 100 kms", "Warning", "No se agrego Colaborador");
+                    showMessage("Este usuario acumula mas del límite de kms permitidos por viaje, kms totál del viaje no puede ser mayor a 100 kms", "Warning", "No se agregó Colaborador");
                 }
+            } else {
+                showMessage("Usuario ya existe en la lista del viaje", "Warning", "No se puede agregar este usuario");
             }
         }
     }//GEN-LAST:event_colaboradoresTableMouseClicked
+
+    private void asignarSucursalBtnMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_asignarSucursalBtnMouseEntered
+        asignarSucursalBtn.setBackground(Color.gray);
+    }//GEN-LAST:event_asignarSucursalBtnMouseEntered
+
+    private void asignarSucursalBtnMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_asignarSucursalBtnMouseExited
+        asignarSucursalBtn.setBackground(new java.awt.Color(51, 51, 51));
+    }//GEN-LAST:event_asignarSucursalBtnMouseExited
+
+    private void registrarViajesBtnMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_registrarViajesBtnMouseEntered
+        registrarViajesBtn.setBackground(Color.gray);
+    }//GEN-LAST:event_registrarViajesBtnMouseEntered
+
+    private void registrarViajesBtnMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_registrarViajesBtnMouseExited
+        registrarViajesBtn.setBackground(new java.awt.Color(51, 51, 51));
+    }//GEN-LAST:event_registrarViajesBtnMouseExited
+
+    private void registrarViajesBtnMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_registrarViajesBtnMousePressed
+        RegistrarViajesView registrarViajesView = context.getBean(RegistrarViajesView.class);
+        registrarViajesView.setVisible(true);
+    }//GEN-LAST:event_registrarViajesBtnMousePressed
+
+    private void reportesBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_reportesBtnMouseClicked
+        ReportesView reportesView = context.getBean(ReportesView.class);
+        reportesView.setVisible(true);
+        reportesView.setLocationRelativeTo(null);
+        this.dispose();
+    }//GEN-LAST:event_reportesBtnMouseClicked
+
+    private void reportesBtnMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_reportesBtnMouseEntered
+        reportesBtn.setBackground(Color.gray);
+    }//GEN-LAST:event_reportesBtnMouseEntered
+
+    private void reportesBtnMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_reportesBtnMouseExited
+        reportesBtn.setBackground(new java.awt.Color(51, 51, 51));
+    }//GEN-LAST:event_reportesBtnMouseExited
+
+    private void asignarSucursalBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_asignarSucursalBtnMouseClicked
+        AdministrarSucursalesView administrarSucursalesView = context.getBean(AdministrarSucursalesView.class);
+        administrarSucursalesView.setVisible(true);
+        administrarSucursalesView.setLocationRelativeTo(null);
+        this.dispose();
+    }//GEN-LAST:event_asignarSucursalBtnMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel SucursalesSeleccionadosLabel;
@@ -685,9 +619,7 @@ public class RegistrarViajesView extends javax.swing.JFrame {
     private javax.swing.JTextField fechaTxtField;
     private javax.swing.JLabel ingresarLabel;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextField jTextField1;
@@ -704,7 +636,5 @@ public class RegistrarViajesView extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> transportistaCmb;
     private javax.swing.JLabel transportistaLabel;
     private javax.swing.JLabel usuarioLabel;
-    private javax.swing.JPanel verAsignacionesBtn;
-    private javax.swing.JPanel verViajesBtn;
     // End of variables declaration//GEN-END:variables
 }
