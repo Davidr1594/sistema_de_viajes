@@ -77,4 +77,10 @@ public class Transportista {
         this.viajes = viajes;
     }
 
+    @Override
+    public String toString() {
+        return nombre;
+    }
+    
+    
 }

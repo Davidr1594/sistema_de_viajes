@@ -26,7 +26,7 @@ public class LoginView extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
     }
     
-      public void showMessage(String message, String type, String title) {
+      private void showMessage(String message, String type, String title) {
         JOptionPane optionPane = new JOptionPane(message);
         if (type.equals("Info")) {
             optionPane.setMessageType(JOptionPane.INFORMATION_MESSAGE);

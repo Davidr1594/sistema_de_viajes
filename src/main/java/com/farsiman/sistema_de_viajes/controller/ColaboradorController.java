@@ -23,4 +23,8 @@ public class ColaboradorController {
         return colaboradorService.getColaboradores();
     }
     
+    public Colaborador getByIdColaborador(Long colaboradorId){
+        return colaboradorService.findColaborador(colaboradorId);
+    }
+    
 }

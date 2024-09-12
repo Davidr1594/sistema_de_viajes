@@ -2,6 +2,7 @@
 package com.farsiman.sistema_de_viajes.controller;
 
 
+import com.farsiman.sistema_de_viajes.model.Colaborador;
 import java.util.List;
 import org.springframework.stereotype.Component;
 import com.farsiman.sistema_de_viajes.model.Sucursal;
@@ -22,4 +23,5 @@ public class SucursalController {
         return sucursalService.getSucursales();
     
     }
+    
 }

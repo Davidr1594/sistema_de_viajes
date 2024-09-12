@@ -1,6 +1,21 @@
 package com.farsiman.sistema_de_viajes.view;
 
+import com.farsiman.sistema_de_viajes.controller.ColaboradorController;
+import com.farsiman.sistema_de_viajes.controller.SucursalColaboradorController;
+import com.farsiman.sistema_de_viajes.controller.SucursalController;
+import com.farsiman.sistema_de_viajes.controller.TransportistaController;
+import com.farsiman.sistema_de_viajes.model.Colaborador;
+import com.farsiman.sistema_de_viajes.model.Sucursal;
+import com.farsiman.sistema_de_viajes.model.SucursalColaborador;
+import com.farsiman.sistema_de_viajes.model.Transportista;
+import jakarta.annotation.PostConstruct;
 import java.awt.Color;
+import java.util.List;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
+import javax.swing.table.TableModel;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -10,9 +25,72 @@ import org.springframework.stereotype.Component;
 @Component
 public class RegistrarViajesView extends javax.swing.JFrame {
 
+    @Autowired
+    SucursalController sucursalControl;
+    @Autowired
+    ColaboradorController colaboradorControl;
+    @Autowired
+    TransportistaController transportistaControl;
+    @Autowired
+    SucursalColaboradorController sucursalColaboradorControl;
+
+    //variable sucursal global
+    Sucursal sucursalSeleccionadaGlobal;
+
+    DefaultTableModel tableModel = new DefaultTableModel();
+    DefaultTableModel tableModelColaboradoresSeleccionados = new DefaultTableModel();
+
     public RegistrarViajesView() {
         initComponents();
         this.setLocationRelativeTo(null);
+    }
+
+    @PostConstruct
+    private void initView() {
+        configureSucursalesCmb();
+        configureTransportistasCmb();
+        configureColaboradoresTableHeader();
+        configureColaboradoresSeleccionadosTableHeader();
+
+    }
+
+    private void configureSucursalesCmb() {
+        List<Sucursal> listSucursales = sucursalControl.getSucursales();
+
+        for (Sucursal sucursal : listSucursales) {
+            sucursalesCmb.addItem(sucursal.getNombre());
+        }
+    }
+
+    private void configureTransportistasCmb() {
+        List<Transportista> listTransportistas = transportistaControl.getTransportistas();
+
+        for (Transportista transportista : listTransportistas) {
+            transportistaCmb.addItem(transportista.getNombre());
+        }
+    }
+
+    private void configureColaboradoresTableHeader() {
+        JTableHeader header = colaboradoresTable.getTableHeader();
+        header.setBackground(Color.gray);
+        colaboradoresTable.setForeground(Color.white);
+        tableModel.addColumn("Id");
+        tableModel.addColumn("Distancia");
+        tableModel.addColumn("Colaborador nombre");
+        tableModel.addColumn("Colaborador Id");
+
+        colaboradoresTable.setModel(tableModel);
+    }
+
+    private void configureColaboradoresSeleccionadosTableHeader() {
+        JTableHeader header = colaboradoresSeleccionadostable.getTableHeader();
+        header.setBackground(Color.gray);
+        colaboradoresSeleccionadostable.setForeground(Color.white);
+        tableModelColaboradoresSeleccionados.addColumn("Id");
+        tableModelColaboradoresSeleccionados.addColumn("Nombre");
+        tableModelColaboradoresSeleccionados.addColumn("Apellido");
+
+        colaboradoresSeleccionadostable.setModel(tableModelColaboradoresSeleccionados);
     }
 
     @SuppressWarnings("unchecked")
@@ -38,7 +116,7 @@ public class RegistrarViajesView extends javax.swing.JFrame {
         reportesLabel = new javax.swing.JLabel();
         colaboradoresSeleccionadosLabel = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        colaboradoresSeleccionadosJtable = new javax.swing.JTable();
+        colaboradoresSeleccionadostable = new javax.swing.JTable();
         transportistaLabel = new javax.swing.JLabel();
         fechaLabel = new javax.swing.JLabel();
         fechaTxtField = new javax.swing.JTextField();
@@ -48,9 +126,11 @@ public class RegistrarViajesView extends javax.swing.JFrame {
         sucursalesCmb = new javax.swing.JComboBox<>();
         kmsLabel = new javax.swing.JLabel();
         kmTxtField = new javax.swing.JTextField();
-        SucursalesSeleccionadosLabel = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        sucursalesJTable = new javax.swing.JTable();
+        colaboradoresTable = new javax.swing.JTable();
+        buscaBtn = new javax.swing.JPanel();
+        buscarLabel = new javax.swing.JLabel();
+        SucursalesSeleccionadosLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -178,7 +258,7 @@ public class RegistrarViajesView extends javax.swing.JFrame {
             .addGroup(verAsignacionesBtnLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel2)
-                .addContainerGap(11, Short.MAX_VALUE))
+                .addContainerGap(21, Short.MAX_VALUE))
         );
         verAsignacionesBtnLayout.setVerticalGroup(
             verAsignacionesBtnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -319,7 +399,7 @@ public class RegistrarViajesView extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        background.add(menuDerechoPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 130, 110, 180));
+        background.add(menuDerechoPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 130, 120, 190));
 
         colaboradoresSeleccionadosLabel.setBackground(new java.awt.Color(255, 255, 255));
         colaboradoresSeleccionadosLabel.setFont(new java.awt.Font("Calibri Light", 1, 18)); // NOI18N
@@ -327,8 +407,9 @@ public class RegistrarViajesView extends javax.swing.JFrame {
         colaboradoresSeleccionadosLabel.setText("Colaboradores Seleccionados");
         background.add(colaboradoresSeleccionadosLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 200, -1, 20));
 
-        colaboradoresSeleccionadosJtable.setBackground(new java.awt.Color(51, 51, 51));
-        colaboradoresSeleccionadosJtable.setModel(new javax.swing.table.DefaultTableModel(
+        colaboradoresSeleccionadostable.setBackground(new java.awt.Color(51, 51, 51));
+        colaboradoresSeleccionadostable.setForeground(new java.awt.Color(255, 255, 255));
+        colaboradoresSeleccionadostable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -339,7 +420,7 @@ public class RegistrarViajesView extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(colaboradoresSeleccionadosJtable);
+        jScrollPane1.setViewportView(colaboradoresSeleccionadostable);
 
         background.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 220, 630, 100));
 
@@ -385,25 +466,31 @@ public class RegistrarViajesView extends javax.swing.JFrame {
 
         background.add(registrarBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 410, 100, 20));
 
-        transportistaCmb.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        transportistaCmb.setBackground(new java.awt.Color(51, 51, 51));
+        transportistaCmb.setForeground(new java.awt.Color(255, 255, 255));
         background.add(transportistaCmb, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 330, 150, 20));
 
-        sucursalesCmb.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        sucursalesCmb.setBackground(new java.awt.Color(51, 51, 51));
+        sucursalesCmb.setForeground(new java.awt.Color(255, 255, 255));
+        sucursalesCmb.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sucursalesCmbActionPerformed(evt);
+            }
+        });
         background.add(sucursalesCmb, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 50, 190, 20));
 
         kmsLabel.setForeground(new java.awt.Color(204, 204, 204));
         kmsLabel.setText("Kilometros acum.");
         background.add(kmsLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 330, -1, -1));
+
+        kmTxtField.setEditable(false);
+        kmTxtField.setBackground(new java.awt.Color(51, 51, 51));
+        kmTxtField.setForeground(new java.awt.Color(255, 255, 255));
         background.add(kmTxtField, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 330, 50, 20));
 
-        SucursalesSeleccionadosLabel.setBackground(new java.awt.Color(255, 255, 255));
-        SucursalesSeleccionadosLabel.setFont(new java.awt.Font("Calibri Light", 1, 18)); // NOI18N
-        SucursalesSeleccionadosLabel.setForeground(new java.awt.Color(204, 204, 204));
-        SucursalesSeleccionadosLabel.setText("Seleccione la Sucursal:");
-        background.add(SucursalesSeleccionadosLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 50, -1, 20));
-
-        sucursalesJTable.setBackground(new java.awt.Color(51, 51, 51));
-        sucursalesJTable.setModel(new javax.swing.table.DefaultTableModel(
+        colaboradoresTable.setBackground(new java.awt.Color(51, 51, 51));
+        colaboradoresTable.setForeground(new java.awt.Color(255, 255, 255));
+        colaboradoresTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -414,9 +501,50 @@ public class RegistrarViajesView extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane2.setViewportView(sucursalesJTable);
+        colaboradoresTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                colaboradoresTableMouseClicked(evt);
+            }
+        });
+        jScrollPane2.setViewportView(colaboradoresTable);
 
         background.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 80, 630, 100));
+
+        buscaBtn.setBackground(new java.awt.Color(51, 51, 51));
+        buscaBtn.setForeground(new java.awt.Color(204, 204, 204));
+        buscaBtn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        buscaBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                buscaBtnMouseClicked(evt);
+            }
+        });
+
+        buscarLabel.setForeground(new java.awt.Color(255, 255, 255));
+        buscarLabel.setText("Buscar");
+
+        javax.swing.GroupLayout buscaBtnLayout = new javax.swing.GroupLayout(buscaBtn);
+        buscaBtn.setLayout(buscaBtnLayout);
+        buscaBtnLayout.setHorizontalGroup(
+            buscaBtnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(buscaBtnLayout.createSequentialGroup()
+                .addGap(15, 15, 15)
+                .addComponent(buscarLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(14, Short.MAX_VALUE))
+        );
+        buscaBtnLayout.setVerticalGroup(
+            buscaBtnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(buscaBtnLayout.createSequentialGroup()
+                .addComponent(buscarLabel)
+                .addGap(0, 4, Short.MAX_VALUE))
+        );
+
+        background.add(buscaBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 50, 70, 20));
+
+        SucursalesSeleccionadosLabel.setBackground(new java.awt.Color(255, 255, 255));
+        SucursalesSeleccionadosLabel.setFont(new java.awt.Font("Calibri Light", 1, 18)); // NOI18N
+        SucursalesSeleccionadosLabel.setForeground(new java.awt.Color(204, 204, 204));
+        SucursalesSeleccionadosLabel.setText("Seleccione la Sucursal:");
+        background.add(SucursalesSeleccionadosLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 50, -1, 20));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -480,46 +608,76 @@ public class RegistrarViajesView extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField1ActionPerformed
 
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(RegistrarViajesView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(RegistrarViajesView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(RegistrarViajesView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(RegistrarViajesView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
+    private void sucursalesCmbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sucursalesCmbActionPerformed
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new RegistrarViajesView().setVisible(true);
+        int selectedIndex = sucursalesCmb.getSelectedIndex();
+        if (selectedIndex >= 0) {
+            Sucursal sucursalSeleccionada = sucursalControl.getSucursales().get(selectedIndex);
+            sucursalSeleccionadaGlobal = sucursalSeleccionada;
+        }
+
+    }//GEN-LAST:event_sucursalesCmbActionPerformed
+
+    private void buscaBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_buscaBtnMouseClicked
+        tableModel.setColumnCount(0);
+        tableModel.setRowCount(0);
+        tableModelColaboradoresSeleccionados.setColumnCount(0);
+        tableModelColaboradoresSeleccionados.setRowCount(0);
+        configureColaboradoresTableHeader();
+        configureColaboradoresSeleccionadosTableHeader();
+
+        String nombre = String.valueOf(sucursalesCmb.getSelectedItem());
+
+        List<SucursalColaborador> listColaboradores = sucursalSeleccionadaGlobal.getSucursalColaboradores();
+        for (SucursalColaborador sucursalColaborador : listColaboradores) {
+            if (sucursalColaborador.getSucursal().getNombre().equals(nombre)) {
+                tableModel.addRow(new Object[]{sucursalColaborador.getId(), sucursalColaborador.getDistancia(), sucursalColaborador.getColaborador().getNombre(), sucursalColaborador.getColaborador().getId()});
             }
-        });
+    }//GEN-LAST:event_buscaBtnMouseClicked
     }
+    private void colaboradoresTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_colaboradoresTableMouseClicked
+Long colaboradorSucursalId = (Long) colaboradoresTable.getValueAt(colaboradoresTable.getSelectedRow(), 0);
+
+// Verificar si el colaborador ya existe en la tabla de colaboradores seleccionados
+boolean exists = false;
+for (int i = 0; i < tableModelColaboradoresSeleccionados.getRowCount(); i++) {
+    Long idEnTabla = (Long) tableModelColaboradoresSeleccionados.getValueAt(i, 0); // Columna del ID del colaborador
+    if (idEnTabla != null && idEnTabla.equals(colaboradorSucursalId)) {
+        exists = true;
+        break; // Si ya existe, detener el ciclo
+    }
+}
+
+// Solo agregar si el colaborador no está en la tabla
+if (!exists) {
+    // Obtener el colaborador desde el controlador usando el ID seleccionado
+    SucursalColaborador sucursalColaborador = sucursalColaboradorControl.getSucursalColaboradorByIdSucursal(colaboradorSucursalId);
+
+    if (sucursalColaborador != null) {
+        // Agregar los datos del colaborador a la tabla de seleccionados
+        tableModelColaboradoresSeleccionados.addRow(new Object[]{
+            sucursalColaborador.getColaborador().getId(),
+            sucursalColaborador.getColaborador().getNombre(),
+            sucursalColaborador.getColaborador().getApellido()
+        });
+    } else {
+        System.out.println("El colaborador seleccionado no existe en el controlador.");
+    }
+} else {
+    System.out.println("El colaborador ya está en la tabla de seleccionados.");
+}
+    }//GEN-LAST:event_colaboradoresTableMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel SucursalesSeleccionadosLabel;
     private javax.swing.JPanel asignarSucursalBtn;
     private javax.swing.JPanel background;
     private javax.swing.JPanel barraSuperiorPanel;
-    private javax.swing.JTable colaboradoresSeleccionadosJtable;
+    private javax.swing.JPanel buscaBtn;
+    private javax.swing.JLabel buscarLabel;
     private javax.swing.JLabel colaboradoresSeleccionadosLabel;
+    private javax.swing.JTable colaboradoresSeleccionadostable;
+    private javax.swing.JTable colaboradoresTable;
     private javax.swing.JLabel fechaLabel;
     private javax.swing.JTextField fechaTxtField;
     private javax.swing.JLabel ingresarLabel;
@@ -538,7 +696,6 @@ public class RegistrarViajesView extends javax.swing.JFrame {
     private javax.swing.JPanel reportesBtn;
     private javax.swing.JLabel reportesLabel;
     private javax.swing.JComboBox<String> sucursalesCmb;
-    private javax.swing.JTable sucursalesJTable;
     private javax.swing.JLabel tituloEsquinaLabel1;
     private javax.swing.JLabel tituloEsquinaLabel2;
     private javax.swing.JComboBox<String> transportistaCmb;

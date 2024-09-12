@@ -7,6 +7,8 @@ import com.farsiman.sistema_de_viajes.model.SucursalColaborador;
 import com.farsiman.sistema_de_viajes.service.IColaboradorService;
 import com.farsiman.sistema_de_viajes.service.ISucursalColaboradorService;
 import com.farsiman.sistema_de_viajes.service.ISucursalService;
+import jakarta.transaction.Transactional;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -35,5 +37,15 @@ public class SucursalColaboradorController {
         sucursalColaborador.setDistancia(kms);
         
         sucursalColaboradorService.saveSucursalColaborador(sucursalColaborador);
+    }
+    
+    @Transactional
+    public List<SucursalColaborador> getSucursalColaboradores(){
+        
+        return sucursalColaboradorService.getSucursalColaboradores();
+    }
+    
+    public SucursalColaborador getSucursalColaboradorByIdSucursal(Long sucursalId){
+        return sucursalColaboradorService.findSucursalColaborador(sucursalId);
     }
 }

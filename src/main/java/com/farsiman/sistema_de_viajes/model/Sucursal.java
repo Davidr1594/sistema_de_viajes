@@ -1,6 +1,7 @@
 package com.farsiman.sistema_de_viajes.model;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -22,7 +23,7 @@ public class Sucursal {
     private String nombre;
     private String direccion;
 
-    @OneToMany(mappedBy = "sucursal")
+    @OneToMany(mappedBy = "sucursal", fetch = FetchType.EAGER)
     private List<SucursalColaborador> sucursalColaboradores;
 
     public Sucursal() {
@@ -65,6 +66,11 @@ public class Sucursal {
 
     public void setSucursalColaboradores(List<SucursalColaborador> sucursalColaboradores) {
         this.sucursalColaboradores = sucursalColaboradores;
+    }
+
+    @Override
+    public String toString() {
+        return nombre;
     }
 
 }

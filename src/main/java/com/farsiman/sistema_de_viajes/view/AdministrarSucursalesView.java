@@ -93,7 +93,7 @@ public class AdministrarSucursalesView extends javax.swing.JFrame {
 
     }
 
-    public void showMessage(String message, String type, String title) {
+    private void showMessage(String message, String type, String title) {
         JOptionPane optionPane = new JOptionPane(message);
         if (type.equals("Info")) {
             optionPane.setMessageType(JOptionPane.INFORMATION_MESSAGE);
