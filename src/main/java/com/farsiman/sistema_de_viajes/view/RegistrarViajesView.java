@@ -34,8 +34,7 @@ public class RegistrarViajesView extends javax.swing.JFrame {
     @Autowired
     private Usuario usuarioSession;
 
-    //variable sucursal global
-    Sucursal sucursalSeleccionadaGlobal;
+ 
     //Variable para acumular y restringir los Kms de un viaje
     double kmsAcumulados = 0.0;
 
@@ -596,10 +595,10 @@ public class RegistrarViajesView extends javax.swing.JFrame {
     }//GEN-LAST:event_buscaBtnMouseClicked
 
     private void colaboradoresTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_colaboradoresTableMouseClicked
-// Obtener el ID del colaborador seleccionado de la tabla de colaboradores
+        // Obtener el ID del colaborador seleccionado de la tabla de colaboradores
         Long colaboradorSucursalId = (Long) colaboradoresTable.getValueAt(colaboradoresTable.getSelectedRow(), 0);
 
-// Obtener el objeto SucursalColaborador
+        // Obtener el objeto SucursalColaborador
         SucursalColaborador sucursalColaborador = sucursalColaboradorControl.getSucursalColaboradorByIdSucursal(colaboradorSucursalId);
 
         if (sucursalColaborador != null) {

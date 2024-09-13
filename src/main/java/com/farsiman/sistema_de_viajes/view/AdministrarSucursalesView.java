@@ -53,7 +53,6 @@ public class AdministrarSucursalesView extends javax.swing.JFrame {
 
     public void setUsuario(Usuario usuario) {
         this.usuarioSession = usuario;
-        // Inicializa la vista usando el usuario
         initView();
     }
 
