@@ -530,7 +530,7 @@ public class ReportesView extends javax.swing.JFrame {
                 for (Viaje viaje : listViajes) {
                     if (viaje.getTransportista().getNombre().equals(transportistaNombre)) {
                         tableModel.addRow(new Object[]{viaje.getId(), viaje.getTransportista().getNombre(), viaje.getSucursalColaborador().getSucursal().getNombre(), viaje.getDistanciaTotal(), viaje.getTransportista().getTarifaPorKM(), viaje.getFecha()});
-                        totalKmsAcumulados += viaje.getDistanciaTotal();
+                        totalKmsAcumulados = totalKmsAcumulados + viaje.getDistanciaTotal();
                         totalPagarTxtField.setText(String.valueOf(totalKmsAcumulados * viaje.getTransportista().getTarifaPorKM()));
                     }
                 }

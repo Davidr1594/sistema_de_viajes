@@ -12,6 +12,7 @@ import org.springframework.context.annotation.ComponentScan;
 public class SistemaDeViajesApplication {
 
     public static void main(String[] args) {
+        System.setProperty("java.awt.headless", "false");
         ApplicationContext context = SpringApplication.run(SistemaDeViajesApplication.class, args);
 
         LoginView loginView = context.getBean(LoginView.class);

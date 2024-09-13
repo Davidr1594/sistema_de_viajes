@@ -1,6 +1,7 @@
 package com.farsiman.sistema_de_viajes.repository;
 
 import com.farsiman.sistema_de_viajes.model.Colaborador;
+import com.farsiman.sistema_de_viajes.model.Transportista;
 import com.farsiman.sistema_de_viajes.model.Viaje;
 import java.util.Date;
 import java.util.List;
@@ -19,5 +20,8 @@ public interface IViajeRepository extends JpaRepository<Viaje, Long> {
     List<Viaje> findByFechaBetween(Date fechaInicio, Date fechaFin);
 
     List<Viaje> findByFechaAndColaboradoresIn(Date fecha, List<Colaborador> colaboradores);
+    
+    List<Viaje> findByFechaAndTransportista(Date fecha, Transportista transportista);
+    
 
 }

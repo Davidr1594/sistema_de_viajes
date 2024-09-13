@@ -1,6 +1,7 @@
 package com.farsiman.sistema_de_viajes.service;
 
 import com.farsiman.sistema_de_viajes.model.Colaborador;
+import com.farsiman.sistema_de_viajes.model.Transportista;
 import com.farsiman.sistema_de_viajes.model.Viaje;
 import com.farsiman.sistema_de_viajes.repository.IViajeRepository;
 import java.util.Date;
@@ -51,6 +52,12 @@ public class ViajeServiceImpl implements IViajeService {
     @Override
     public List<Viaje> findByFechaAndColaboradoresIn(Date fecha, List<Colaborador> colaboradores) {
         return viajeRepo.findByFechaAndColaboradoresIn(fecha, colaboradores);
+    }
+
+
+    @Override
+    public List<Viaje> findByFechaAndTransportistasIn(Date fecha, Transportista transportista) {
+        return viajeRepo.findByFechaAndTransportista(fecha, transportista);
     }
 
 }

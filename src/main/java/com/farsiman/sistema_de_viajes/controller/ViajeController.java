@@ -39,14 +39,20 @@ public class ViajeController {
         }
         return false;
     }
-    public List<Viaje> getViajesBetweenDate(Date fechaInicio, Date fechaFinal){
-        
+
+    public List<Viaje> getViajesBetweenDate(Date fechaInicio, Date fechaFinal) {
+
         return viajeService.getViajesBetweenDates(fechaInicio, fechaFinal);
     }
-    
-        public boolean isColaboradorAvailable(Date fecha, List<Colaborador> colaboradores) {
+
+    public boolean isColaboradorAvailable(Date fecha, List<Colaborador> colaboradores) {
         List<Viaje> listViajes = viajeService.findByFechaAndColaboradoresIn(fecha, colaboradores);
-        return listViajes.isEmpty(); // Retorna true si no hay viajes para esos colaboradores en esa fecha
+        return listViajes.isEmpty(); 
     }
 
+
+    public boolean isTransportistaAvailable(Date fecha, Transportista transportista) {
+        List<Viaje> listTransportistas = viajeService.findByFechaAndTransportistasIn(fecha, transportista);
+        return listTransportistas.isEmpty(); 
+    }
 }

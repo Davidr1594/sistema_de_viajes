@@ -18,5 +18,5 @@ public interface ITransportistaService {
     public Transportista findTransportista(Long id);
 
     public void editTransportista(Transportista transportista);
-
+    
 }

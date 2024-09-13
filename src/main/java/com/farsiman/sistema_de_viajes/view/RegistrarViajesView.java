@@ -65,6 +65,8 @@ public class RegistrarViajesView extends javax.swing.JFrame {
     }
 
     private void initView() {
+        
+        sucursalesCmb.removeAllItems();
         configureSucursalesCmb();
         configureTransportistasCmb();
         configureColaboradoresTableHeader();
@@ -576,6 +578,7 @@ public class RegistrarViajesView extends javax.swing.JFrame {
         kmTxtField.setText("");
         configureColaboradoresTableHeader();
         configureColaboradoresSeleccionadosTableHeader();
+        kmsAcumulados=0.0;
 
         String nombre = String.valueOf(sucursalesCmb.getSelectedItem());
 
@@ -679,66 +682,73 @@ public class RegistrarViajesView extends javax.swing.JFrame {
     }//GEN-LAST:event_asignarSucursalBtnMouseClicked
 
     private void registrarBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_registrarBtnMouseClicked
-        if (usuarioSession.getRol().equals("gerenteTienda")) {
+         if (usuarioSession.getRol().equals("gerenteTienda")) {
 
-            Date fecha = fechaJDate.getDate();
-            SucursalColaborador sucursalColaborador = null;
-            Transportista transportista = null;
-            List<Colaborador> listColaboradoresTotalViaje = new ArrayList<Colaborador>();
-            double kmsTotal;
+        Date fecha = fechaJDate.getDate();
+        SucursalColaborador sucursalColaborador = null;
+        Transportista transportista = null;
+        List<Colaborador> listColaboradoresTotalViaje = new ArrayList<Colaborador>();
+        double kmsTotal;
 
-            String kmsText = kmTxtField.getText();
-            System.out.println("KmText: " + kmsText);
+        String kmsText = kmTxtField.getText();
+        if (kmsText != null && !kmsText.isEmpty()) {
+            kmsTotal = Double.parseDouble(kmsText);
+        } else {
+            showMessage("El campo de kilómetros está vacío", "Error", "Kilómetros inválido");
+            return;  // Salir del método si el campo es inválido
+        }
 
-            if (kmsText != null && !kmsText.isEmpty()) {
-                kmsTotal = Double.parseDouble(kmsText);
-                System.out.println("KmsTotal: " + kmsTotal);
+        // Asignar transportista
+        String nombreTransportista = String.valueOf(transportistaCmb.getSelectedItem());
+        if (nombreTransportista != null) {
+            transportista = transportistaControl.getTransportista(nombreTransportista);
+        } else {
+            showMessage("No se ha seleccionado ningun transportista", "Error", "Transportista null");
+            return; // Salir del método si no hay transportista seleccionado
+        }
+
+        // Asignar sucursal
+        String nombreSucursal = String.valueOf(sucursalesCmb.getSelectedItem());
+        if (nombreSucursal != null) {
+            sucursalColaborador = sucursalColaboradorControl.getSucursalColaborador(nombreSucursal);
+        } else {
+            showMessage("No se ha seleccionado ninguna sucursal", "Error", "Sucursal null");
+            return; // Salir del método si no hay sucursal seleccionada
+        }
+
+        // Crear lista de colaboradores seleccionados
+        List<Long> listIdColaboradores = new ArrayList<Long>();
+        for (int i = 0; i < colaboradoresSeleccionadostable.getRowCount(); i++) {
+            Long idColaborador = (Long) colaboradoresSeleccionadostable.getValueAt(i, 0);
+            listIdColaboradores.add(idColaborador);
+        }
+        listColaboradoresTotalViaje = colaboradorControl.getColaboradores(listIdColaboradores);
+
+        
+        // Verificar si ya existe un viaje para el mismo transportista en la misma fecha 
+        boolean isViajeTransportistaSameDate = viajeControl.isTransportistaAvailable(fecha, transportista);
+        if (!isViajeTransportistaSameDate) {
+            showMessage("El transportista ya tiene un viaje registrado en esta fecha", "Error", "Viaje duplicado");
+            return; // Salir del método si el transportista ya tiene un viaje
+        }
+
+        // Verificar si algún colaborador ya tiene un viaje en la misma fecha
+        boolean isColaboradorInViajeSameDate = viajeControl.isColaboradorAvailable(fecha, listColaboradoresTotalViaje);
+        if (isColaboradorInViajeSameDate) {
+            // Se asignan todas las variables a ViajeController para cargar los datos a la BD
+            boolean isViajeTrue = viajeControl.saveViaje(fecha, sucursalColaborador, transportista, listColaboradoresTotalViaje, usuarioSession, kmsTotal);
+            if (isViajeTrue) {
+                showMessage("Viaje registrado Exitosamente", "Info", "Viaje Guardado");
             } else {
-                showMessage("El campo de kilómetros está vacío", "Error", "Kilómetros inválido");
-                return;  // Salir del método si el campo es inválido
-            }
-
-            //Asignar un transportista a variable transportista
-            String nombreTransportista = String.valueOf(transportistaCmb.getSelectedItem());
-            System.out.println("nombreTransportista: " + nombreTransportista);
-            if (nombreTransportista != null) {
-                transportista = transportistaControl.getTransportista(nombreTransportista);
-            } else {
-                showMessage("No se ha seleccionado ningun transportista", "Error", "Transportista null");
-            }
-
-            //asignar una sucursal a la variable sucursal
-            String nombreSucursal = String.valueOf(sucursalesCmb.getSelectedItem());
-            if (nombreSucursal != null) {
-                sucursalColaborador = sucursalColaboradorControl.getSucursalColaborador(nombreSucursal);
-
-            } else {
-                showMessage("No se ha seleccionado ninguna sucursal", "Error", "Sucursal null");
-            }
-
-            //Crea un list de idColaboradores para mandar a guardar todos los empleados seleccionados 
-            List<Long> listIdColaboradores = new ArrayList<Long>();
-
-            for (int i = 0; i < colaboradoresSeleccionadostable.getRowCount(); i++) {
-                Long idColaborador = (Long) colaboradoresSeleccionadostable.getValueAt(i, 0);
-                listIdColaboradores.add(idColaborador);
-            }
-            listColaboradoresTotalViaje = colaboradorControl.getColaboradores(listIdColaboradores);
-            boolean isColaboradorInViajeSameDate = viajeControl.isColaboradorAvailable(fecha, listColaboradoresTotalViaje);
-            if (isColaboradorInViajeSameDate) {
-                //Se asignan todas las variables a ViajeController para cargar los datos a la BD
-                boolean isViajeTrue = viajeControl.saveViaje(fecha, sucursalColaborador, transportista, listColaboradoresTotalViaje, usuarioSession, kmsTotal);
-                if (isViajeTrue) {
-                    showMessage("Viaje registrado Exitosamente", "Info", "Viaje Guardado");
-                } else {
-                    showMessage("Viaje no registrado", "Error", "Viaje no guardado");
-                }
-            }else {
-                showMessage("No se puede regitrar 2 viajes el mismo dia para un colaborador", "Error", "No se puedo registrar Viaje");
+                showMessage("Viaje no registrado", "Error", "Viaje no guardado");
             }
         } else {
-            showMessage("Solo el Gerente de Tienda pueden registrar un viaje", "Error", "No se puede crear el viaje");
+            showMessage("No se puede registrar 2 viajes el mismo dia para un colaborador", "Error", "No se puedo registrar Viaje");
         }
+    } else {
+        showMessage("Solo el Gerente de Tienda pueden registrar un viaje", "Error", "No se puede crear el viaje");
+    }
+
     }//GEN-LAST:event_registrarBtnMouseClicked
 
     private void logoutBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logoutBtnMouseClicked
