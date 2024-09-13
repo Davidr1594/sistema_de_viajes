@@ -16,9 +16,6 @@ public class SistemaDeViajesApplication {
 
         LoginView loginView = context.getBean(LoginView.class);
         loginView.setVisible(true);
-
-        AdministrarSucursalesView administrarSucursalesView = context.getBean(AdministrarSucursalesView.class);
-
     }
 
 }

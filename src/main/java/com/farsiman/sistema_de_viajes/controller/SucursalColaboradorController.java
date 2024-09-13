@@ -1,13 +1,8 @@
 package com.farsiman.sistema_de_viajes.controller;
 
-import com.farsiman.sistema_de_viajes.model.Colaborador;
-import com.farsiman.sistema_de_viajes.model.Sucursal;
-import com.farsiman.sistema_de_viajes.model.SucursalColaborador;
-import com.farsiman.sistema_de_viajes.service.IColaboradorService;
-import com.farsiman.sistema_de_viajes.service.ISucursalColaboradorService;
-import com.farsiman.sistema_de_viajes.service.ISucursalService;
+import com.farsiman.sistema_de_viajes.model.*;
+import com.farsiman.sistema_de_viajes.service.*;
 import jakarta.transaction.Transactional;
-import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

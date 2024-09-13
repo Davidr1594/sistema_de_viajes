@@ -1,6 +1,7 @@
 package com.farsiman.sistema_de_viajes.view;
 
 import com.farsiman.sistema_de_viajes.controller.UsuarioController;
+import com.farsiman.sistema_de_viajes.model.Usuario;
 import java.awt.Color;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
@@ -17,16 +18,17 @@ public class LoginView extends javax.swing.JFrame {
 
     @Autowired
     private UsuarioController usuarioControl;
-
     @Autowired
     private ApplicationContext context;
-    
+    @Autowired
+    private Usuario usuarioSession;
+
     public LoginView() {
         initComponents();
         this.setLocationRelativeTo(null);
     }
-    
-      private void showMessage(String message, String type, String title) {
+
+    private void showMessage(String message, String type, String title) {
         JOptionPane optionPane = new JOptionPane(message);
         if (type.equals("Info")) {
             optionPane.setMessageType(JOptionPane.INFORMATION_MESSAGE);
@@ -185,7 +187,7 @@ public class LoginView extends javax.swing.JFrame {
         if (String.valueOf(contraseniaTxtField.getPassword()).equals("**********")) {
             contraseniaTxtField.setText("");
             contraseniaTxtField.setForeground(Color.WHITE);
-        } 
+        }
         if (usuarioTxtField.getText().isEmpty()) {
             usuarioTxtField.setText("Ingrese su nombre de usuario");
             usuarioTxtField.setForeground(Color.GRAY);
@@ -197,13 +199,18 @@ public class LoginView extends javax.swing.JFrame {
         String nombre = usuarioTxtField.getText();
         String contrasenia = String.valueOf(contraseniaTxtField.getPassword());
 
-        boolean result = usuarioControl.validUsuario(nombre, contrasenia);
+        Usuario usuario = usuarioControl.validUsuario(nombre, contrasenia);
 
-        if (result) {
+        if (usuario != null) {
+            usuarioSession = usuario;
+           
             AdministrarSucursalesView administrarSucursalesView = context.getBean(AdministrarSucursalesView.class);
+            administrarSucursalesView.setUsuario(usuario);
             administrarSucursalesView.setVisible(true);
-            System.out.println("Se ha validado el usuario");
-        }else{showMessage("Usario o Contrasenia incorrectos", "Error", "Datos no válidos");}
+            this.dispose();
+        } else {
+            showMessage("Usario o Contrasenia incorrectos", "Error", "Datos no válidos");
+        }
 
     }//GEN-LAST:event_ingresarBtnMousePressed
 

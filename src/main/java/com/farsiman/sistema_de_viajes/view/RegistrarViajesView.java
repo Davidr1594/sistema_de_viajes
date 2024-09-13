@@ -1,20 +1,9 @@
 package com.farsiman.sistema_de_viajes.view;
 
-import com.farsiman.sistema_de_viajes.controller.ColaboradorController;
-import com.farsiman.sistema_de_viajes.controller.SucursalColaboradorController;
-import com.farsiman.sistema_de_viajes.controller.SucursalController;
-import com.farsiman.sistema_de_viajes.controller.TransportistaController;
-import com.farsiman.sistema_de_viajes.controller.ViajeController;
-import com.farsiman.sistema_de_viajes.model.Colaborador;
-import com.farsiman.sistema_de_viajes.model.Sucursal;
-import com.farsiman.sistema_de_viajes.model.SucursalColaborador;
-import com.farsiman.sistema_de_viajes.model.Transportista;
-import com.farsiman.sistema_de_viajes.model.Usuario;
-import jakarta.annotation.PostConstruct;
+import com.farsiman.sistema_de_viajes.controller.*;
+import com.farsiman.sistema_de_viajes.model.*;
 import java.awt.Color;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -42,6 +31,8 @@ public class RegistrarViajesView extends javax.swing.JFrame {
     ViajeController viajeControl;
     @Autowired
     ApplicationContext context;
+    @Autowired
+    private Usuario usuarioSession;
 
     //variable sucursal global
     Sucursal sucursalSeleccionadaGlobal;
@@ -67,12 +58,23 @@ public class RegistrarViajesView extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
     }
 
-    @PostConstruct
+    public void setUsuario(Usuario usuario) {
+        this.usuarioSession = usuario;
+        // Inicializa la vista usando el usuario
+        initView();
+    }
+
     private void initView() {
         configureSucursalesCmb();
         configureTransportistasCmb();
         configureColaboradoresTableHeader();
         configureColaboradoresSeleccionadosTableHeader();
+
+        if (usuarioSession == null) {
+            // Manejar el caso cuando usuarioSession es null
+            throw new IllegalStateException("UsuarioSession no ha sido inyectado.");
+        }
+        usuarioTxtField.setText(usuarioSession.getNombre());
 
     }
 
@@ -93,6 +95,9 @@ public class RegistrarViajesView extends javax.swing.JFrame {
     }
 
     private void configureColaboradoresTableHeader() {
+        tableModel.setColumnCount(0);
+        tableModel.setRowCount(0);
+        
         JTableHeader header = colaboradoresTable.getTableHeader();
         header.setBackground(Color.gray);
         colaboradoresTable.setForeground(Color.white);
@@ -105,6 +110,9 @@ public class RegistrarViajesView extends javax.swing.JFrame {
     }
 
     private void configureColaboradoresSeleccionadosTableHeader() {
+        tableModelColaboradoresSeleccionados.setColumnCount(0);
+        tableModelColaboradoresSeleccionados.setRowCount(0);
+        
         JTableHeader header = colaboradoresSeleccionadostable.getTableHeader();
         header.setBackground(Color.gray);
         colaboradoresSeleccionadostable.setForeground(Color.white);
@@ -136,7 +144,7 @@ public class RegistrarViajesView extends javax.swing.JFrame {
         tituloEsquinaLabel1 = new javax.swing.JLabel();
         tituloEsquinaLabel2 = new javax.swing.JLabel();
         usuarioLabel = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        usuarioTxtField = new javax.swing.JTextField();
         colaboradoresSeleccionadosLabel = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         colaboradoresSeleccionadostable = new javax.swing.JTable();
@@ -161,6 +169,8 @@ public class RegistrarViajesView extends javax.swing.JFrame {
         reportesBtn = new javax.swing.JPanel();
         reportesLabel = new javax.swing.JLabel();
         fechaJDate = new com.toedter.calendar.JDateChooser();
+        logoutBtn = new javax.swing.JPanel();
+        logoutLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -184,12 +194,12 @@ public class RegistrarViajesView extends javax.swing.JFrame {
         usuarioLabel.setForeground(new java.awt.Color(204, 204, 204));
         usuarioLabel.setText("Usuario:");
 
-        jTextField1.setBackground(new java.awt.Color(51, 51, 51));
-        jTextField1.setForeground(new java.awt.Color(255, 255, 255));
-        jTextField1.setBorder(null);
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        usuarioTxtField.setBackground(new java.awt.Color(51, 51, 51));
+        usuarioTxtField.setForeground(new java.awt.Color(255, 255, 255));
+        usuarioTxtField.setBorder(null);
+        usuarioTxtField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                usuarioTxtFieldActionPerformed(evt);
             }
         });
 
@@ -201,10 +211,10 @@ public class RegistrarViajesView extends javax.swing.JFrame {
                 .addComponent(tituloEsquinaLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(162, 162, 162)
                 .addComponent(tituloEsquinaLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 222, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 232, Short.MAX_VALUE)
                 .addComponent(usuarioLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(usuarioTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18))
         );
         barraSuperiorPanelLayout.setVerticalGroup(
@@ -212,7 +222,7 @@ public class RegistrarViajesView extends javax.swing.JFrame {
             .addGroup(barraSuperiorPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(barraSuperiorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(usuarioTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(usuarioLabel))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(barraSuperiorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -220,7 +230,7 @@ public class RegistrarViajesView extends javax.swing.JFrame {
                 .addComponent(tituloEsquinaLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
         );
 
-        background.add(barraSuperiorPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 880, 30));
+        background.add(barraSuperiorPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 890, 30));
 
         colaboradoresSeleccionadosLabel.setBackground(new java.awt.Color(255, 255, 255));
         colaboradoresSeleccionadosLabel.setFont(new java.awt.Font("Calibri Light", 1, 18)); // NOI18N
@@ -496,6 +506,45 @@ public class RegistrarViajesView extends javax.swing.JFrame {
         fechaJDate.setForeground(new java.awt.Color(255, 255, 255));
         background.add(fechaJDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 330, 150, 20));
 
+        logoutBtn.setBackground(new java.awt.Color(51, 0, 0));
+        logoutBtn.setForeground(new java.awt.Color(255, 255, 255));
+        logoutBtn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        logoutBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                logoutBtnMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                logoutBtnMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                logoutBtnMouseExited(evt);
+            }
+        });
+
+        logoutLabel.setBackground(new java.awt.Color(204, 204, 204));
+        logoutLabel.setForeground(new java.awt.Color(204, 204, 204));
+        logoutLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        logoutLabel.setText("LOGOUT");
+
+        javax.swing.GroupLayout logoutBtnLayout = new javax.swing.GroupLayout(logoutBtn);
+        logoutBtn.setLayout(logoutBtnLayout);
+        logoutBtnLayout.setHorizontalGroup(
+            logoutBtnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(logoutBtnLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(logoutLabel)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        logoutBtnLayout.setVerticalGroup(
+            logoutBtnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, logoutBtnLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(logoutLabel)
+                .addContainerGap())
+        );
+
+        background.add(logoutBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 440, -1, -1));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -504,15 +553,15 @@ public class RegistrarViajesView extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(background, javax.swing.GroupLayout.DEFAULT_SIZE, 432, Short.MAX_VALUE)
+            .addComponent(background, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void usuarioTxtFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usuarioTxtFieldActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    }//GEN-LAST:event_usuarioTxtFieldActionPerformed
 
     private void sucursalesCmbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sucursalesCmbActionPerformed
 
@@ -575,10 +624,10 @@ public class RegistrarViajesView extends javax.swing.JFrame {
                         sucursalColaborador.getColaborador().getApellido()
                     });
                 } else {
-                    showMessage("Este usuario acumula mas del límite de kms permitidos por viaje, kms totál del viaje no puede ser mayor a 100 kms", "Warning", "No se agregó Colaborador");
+                    showMessage("Este usuario acumula mas del límite de kms permitidos por viaje, kms totál del viaje no puede ser mayor a 100 kms", "Error", "No se agregó Colaborador");
                 }
             } else {
-                showMessage("Usuario ya existe en la lista del viaje", "Warning", "No se puede agregar este usuario");
+                showMessage("Usuario ya existe en la lista del viaje", "Error", "No se puede agregar este usuario");
             }
         }
     }//GEN-LAST:event_colaboradoresTableMouseClicked
@@ -601,11 +650,14 @@ public class RegistrarViajesView extends javax.swing.JFrame {
 
     private void registrarViajesBtnMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_registrarViajesBtnMousePressed
         RegistrarViajesView registrarViajesView = context.getBean(RegistrarViajesView.class);
+        registrarViajesView.setUsuario(usuarioSession);
         registrarViajesView.setVisible(true);
+        registrarViajesView.setLocationRelativeTo(null);
     }//GEN-LAST:event_registrarViajesBtnMousePressed
 
     private void reportesBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_reportesBtnMouseClicked
         ReportesView reportesView = context.getBean(ReportesView.class);
+        reportesView.setUsuario(usuarioSession);
         reportesView.setVisible(true);
         reportesView.setLocationRelativeTo(null);
         this.dispose();
@@ -627,62 +679,84 @@ public class RegistrarViajesView extends javax.swing.JFrame {
     }//GEN-LAST:event_asignarSucursalBtnMouseClicked
 
     private void registrarBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_registrarBtnMouseClicked
-        Date fecha = fechaJDate.getDate();
-        SucursalColaborador sucursalColaborador = null;
-        Transportista transportista = null;
-        List<Colaborador> listColaboradoresTotalViaje = new ArrayList<Colaborador>();
-        double kmsTotal;
+        if (usuarioSession.getRol().equals("gerenteTienda")) {
 
-        Usuario userPrueba = new Usuario(1L, "DavidUsuario", "1234", "admin");
+            Date fecha = fechaJDate.getDate();
+            SucursalColaborador sucursalColaborador = null;
+            Transportista transportista = null;
+            List<Colaborador> listColaboradoresTotalViaje = new ArrayList<Colaborador>();
+            double kmsTotal;
 
-        String kmsText = kmTxtField.getText();
-        System.out.println("KmText: " + kmsText);
+            String kmsText = kmTxtField.getText();
+            System.out.println("KmText: " + kmsText);
 
-        if (kmsText != null && !kmsText.isEmpty()) {
-            kmsTotal = Double.parseDouble(kmsText);
-            System.out.println("KmsTotal: " + kmsTotal);
+            if (kmsText != null && !kmsText.isEmpty()) {
+                kmsTotal = Double.parseDouble(kmsText);
+                System.out.println("KmsTotal: " + kmsTotal);
+            } else {
+                showMessage("El campo de kilómetros está vacío", "Error", "Kilómetros inválido");
+                return;  // Salir del método si el campo es inválido
+            }
+
+            //Asignar un transportista a variable transportista
+            String nombreTransportista = String.valueOf(transportistaCmb.getSelectedItem());
+            System.out.println("nombreTransportista: " + nombreTransportista);
+            if (nombreTransportista != null) {
+                transportista = transportistaControl.getTransportista(nombreTransportista);
+            } else {
+                showMessage("No se ha seleccionado ningun transportista", "Error", "Transportista null");
+            }
+
+            //asignar una sucursal a la variable sucursal
+            String nombreSucursal = String.valueOf(sucursalesCmb.getSelectedItem());
+            if (nombreSucursal != null) {
+                sucursalColaborador = sucursalColaboradorControl.getSucursalColaborador(nombreSucursal);
+
+            } else {
+                showMessage("No se ha seleccionado ninguna sucursal", "Error", "Sucursal null");
+            }
+
+            //Crea un list de idColaboradores para mandar a guardar todos los empleados seleccionados 
+            List<Long> listIdColaboradores = new ArrayList<Long>();
+
+            for (int i = 0; i < colaboradoresSeleccionadostable.getRowCount(); i++) {
+                Long idColaborador = (Long) colaboradoresSeleccionadostable.getValueAt(i, 0);
+                listIdColaboradores.add(idColaborador);
+            }
+            listColaboradoresTotalViaje = colaboradorControl.getColaboradores(listIdColaboradores);
+            boolean isColaboradorInViajeSameDate = viajeControl.isColaboradorAvailable(fecha, listColaboradoresTotalViaje);
+            if (isColaboradorInViajeSameDate) {
+                //Se asignan todas las variables a ViajeController para cargar los datos a la BD
+                boolean isViajeTrue = viajeControl.saveViaje(fecha, sucursalColaborador, transportista, listColaboradoresTotalViaje, usuarioSession, kmsTotal);
+                if (isViajeTrue) {
+                    showMessage("Viaje registrado Exitosamente", "Info", "Viaje Guardado");
+                } else {
+                    showMessage("Viaje no registrado", "Error", "Viaje no guardado");
+                }
+            }else {
+                showMessage("No se puede regitrar 2 viajes el mismo dia para un colaborador", "Error", "No se puedo registrar Viaje");
+            }
         } else {
-            showMessage("El campo de kilómetros está vacío", "Error", "Kilómetros inválido");
-            return;  // Salir del método si el campo es inválido
+            showMessage("Solo el Gerente de Tienda pueden registrar un viaje", "Error", "No se puede crear el viaje");
         }
-
-        //Asignar un transportista a variable transportista
-        String nombreTransportista = String.valueOf(transportistaCmb.getSelectedItem());
-        System.out.println("nombreTransportista: " + nombreTransportista);
-        if (nombreTransportista != null) {
-            transportista = transportistaControl.getTransportista(nombreTransportista);
-        } else {
-            showMessage("No se ha seleccionado ningun transportista", "Error", "Transportista null");
-        }
-
-        //asignar una sucursal a la variable sucursal
-        String nombreSucursal = String.valueOf(sucursalesCmb.getSelectedItem());
-        if (nombreSucursal != null) {
-            sucursalColaborador = sucursalColaboradorControl.getSucursalColaborador(nombreSucursal);
-
-        } else {
-            showMessage("No se ha seleccionado ninguna sucursal", "error", "Sucursal null");
-        }
-
-        //Crea un list de idColaboradores para mandar a guardar todos los empleados seleccionados 
-        List<Long> listIdColaboradores = new ArrayList<Long>();
-
-        for (int i = 0; i < colaboradoresSeleccionadostable.getRowCount(); i++) {
-            Long idEmpleados = (Long) colaboradoresSeleccionadostable.getValueAt(i, 0);
-            listIdColaboradores.add(idEmpleados);
-        }
-
-        listColaboradoresTotalViaje = colaboradorControl.getColaboradores(listIdColaboradores);
-
-        //Se asignan todas las variables a ViajeController para cargar los datos a la BD
-        boolean isViajeTrue = viajeControl.saveViaje(fecha, sucursalColaborador, transportista, listColaboradoresTotalViaje, userPrueba, kmsTotal);
-        if (isViajeTrue) {
-            showMessage("Viaje registrado Exitosamente", "Info", "Viaje Guardado");
-        } else {
-            showMessage("Viaje no registrado", "Error", "Viaje no guardado");
-        }
-
     }//GEN-LAST:event_registrarBtnMouseClicked
+
+    private void logoutBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logoutBtnMouseClicked
+        usuarioSession.logOut();
+        LoginView loginView = context.getBean(LoginView.class
+        );
+        loginView.setVisible(true);
+        loginView.setLocationRelativeTo(null);
+        this.dispose();
+    }//GEN-LAST:event_logoutBtnMouseClicked
+
+    private void logoutBtnMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logoutBtnMouseEntered
+        // TODO add your handling code here:
+    }//GEN-LAST:event_logoutBtnMouseEntered
+
+    private void logoutBtnMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logoutBtnMouseExited
+        // TODO add your handling code here:
+    }//GEN-LAST:event_logoutBtnMouseExited
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel SucursalesSeleccionadosLabel;
@@ -701,9 +775,10 @@ public class RegistrarViajesView extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField kmTxtField;
     private javax.swing.JLabel kmsLabel;
+    private javax.swing.JPanel logoutBtn;
+    private javax.swing.JLabel logoutLabel;
     private javax.swing.JPanel menuDerechoPanel;
     private javax.swing.JPanel registrarBtn;
     private javax.swing.JPanel registrarViajesBtn;
@@ -715,5 +790,6 @@ public class RegistrarViajesView extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> transportistaCmb;
     private javax.swing.JLabel transportistaLabel;
     private javax.swing.JLabel usuarioLabel;
+    private javax.swing.JTextField usuarioTxtField;
     // End of variables declaration//GEN-END:variables
 }

@@ -1,17 +1,12 @@
 package com.farsiman.sistema_de_viajes.view;
 
-import com.farsiman.sistema_de_viajes.controller.SucursalColaboradorController;
-import com.farsiman.sistema_de_viajes.controller.TransportistaController;
-import com.farsiman.sistema_de_viajes.controller.ViajeController;
-import com.farsiman.sistema_de_viajes.model.Transportista;
-import com.farsiman.sistema_de_viajes.model.Viaje;
-import jakarta.annotation.PostConstruct;
+import com.farsiman.sistema_de_viajes.controller.*;
+import com.farsiman.sistema_de_viajes.model.*;
 import java.awt.Color;
 import java.util.Date;
 import java.util.List;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
-import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +28,8 @@ public class ReportesView extends javax.swing.JFrame {
     SucursalColaboradorController sucursalColaboradoresControl;
     @Autowired
     ViajeController viajeControl;
-
+    @Autowired
+    private Usuario usuarioSession;
 
     DefaultTableModel tableModel = new DefaultTableModel() {
         @Override
@@ -47,11 +43,20 @@ public class ReportesView extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
     }
 
-    @PostConstruct
+    public void setUsuario(Usuario usuario) {
+        this.usuarioSession = usuario;
+        initView();
+    }
+
     private void initView() {
 
         configureTransportistaCmb();
         configureViajeTableHeader();
+        
+        if (usuarioSession == null) {
+            throw new IllegalStateException("UsuarioSession no ha sido inyectado.");
+        }
+        usuarioTxtField.setText(usuarioSession.getNombre());
 
     }
 
@@ -64,7 +69,9 @@ public class ReportesView extends javax.swing.JFrame {
     }
 
     private void configureViajeTableHeader() {
-
+        tableModel.setColumnCount(0);
+        tableModel.setRowCount(0);
+        
         JTableHeader header = reportesTable.getTableHeader();
         header.setBackground(Color.gray);
         reportesTable.setForeground(Color.white);
@@ -110,13 +117,11 @@ public class ReportesView extends javax.swing.JFrame {
         tituloEsquinaLabel1 = new javax.swing.JLabel();
         tituloEsquinaLabel2 = new javax.swing.JLabel();
         usuarioLabel = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        usuarioTxtField = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         reportesTable = new javax.swing.JTable();
         textoInformaticoSeleccionLabel = new javax.swing.JLabel();
         totalPagarTxtField = new javax.swing.JTextField();
-        asignarBtn = new javax.swing.JPanel();
-        ingresarLabel = new javax.swing.JLabel();
         fechaLabel2 = new javax.swing.JLabel();
         fechaLabel3 = new javax.swing.JLabel();
         fechaLabel4 = new javax.swing.JLabel();
@@ -133,6 +138,8 @@ public class ReportesView extends javax.swing.JFrame {
         buscarBtn = new javax.swing.JPanel();
         ingresarLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
+        logoutBtn = new javax.swing.JPanel();
+        logoutLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -156,12 +163,12 @@ public class ReportesView extends javax.swing.JFrame {
         usuarioLabel.setForeground(new java.awt.Color(204, 204, 204));
         usuarioLabel.setText("Usuario:");
 
-        jTextField1.setBackground(new java.awt.Color(51, 51, 51));
-        jTextField1.setForeground(new java.awt.Color(255, 255, 255));
-        jTextField1.setBorder(null);
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        usuarioTxtField.setBackground(new java.awt.Color(51, 51, 51));
+        usuarioTxtField.setForeground(new java.awt.Color(255, 255, 255));
+        usuarioTxtField.setBorder(null);
+        usuarioTxtField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                usuarioTxtFieldActionPerformed(evt);
             }
         });
 
@@ -176,7 +183,7 @@ public class ReportesView extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 250, Short.MAX_VALUE)
                 .addComponent(usuarioLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(usuarioTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         barraSuperiorPanelLayout.setVerticalGroup(
@@ -187,7 +194,7 @@ public class ReportesView extends javax.swing.JFrame {
             .addGroup(barraSuperiorPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(barraSuperiorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(usuarioTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(usuarioLabel))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -220,33 +227,6 @@ public class ReportesView extends javax.swing.JFrame {
         totalPagarTxtField.setBackground(new java.awt.Color(51, 51, 51));
         totalPagarTxtField.setForeground(new java.awt.Color(255, 255, 255));
         background.add(totalPagarTxtField, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 340, 60, 20));
-
-        asignarBtn.setBackground(new java.awt.Color(51, 51, 51));
-        asignarBtn.setForeground(new java.awt.Color(102, 102, 102));
-        asignarBtn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-
-        ingresarLabel.setFont(new java.awt.Font("Calibri Light", 1, 14)); // NOI18N
-        ingresarLabel.setForeground(new java.awt.Color(255, 255, 255));
-        ingresarLabel.setText("ASIGNAR");
-        ingresarLabel.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-
-        javax.swing.GroupLayout asignarBtnLayout = new javax.swing.GroupLayout(asignarBtn);
-        asignarBtn.setLayout(asignarBtnLayout);
-        asignarBtnLayout.setHorizontalGroup(
-            asignarBtnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(asignarBtnLayout.createSequentialGroup()
-                .addGap(23, 23, 23)
-                .addComponent(ingresarLabel)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        asignarBtnLayout.setVerticalGroup(
-            asignarBtnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, asignarBtnLayout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(ingresarLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
-
-        background.add(asignarBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 410, 100, 20));
 
         fechaLabel2.setBackground(new java.awt.Color(255, 255, 255));
         fechaLabel2.setFont(new java.awt.Font("Calibri Light", 1, 14)); // NOI18N
@@ -433,6 +413,45 @@ public class ReportesView extends javax.swing.JFrame {
         jLabel2.setText("L.");
         background.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 340, -1, -1));
 
+        logoutBtn.setBackground(new java.awt.Color(51, 0, 0));
+        logoutBtn.setForeground(new java.awt.Color(255, 255, 255));
+        logoutBtn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        logoutBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                logoutBtnMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                logoutBtnMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                logoutBtnMouseExited(evt);
+            }
+        });
+
+        logoutLabel.setBackground(new java.awt.Color(204, 204, 204));
+        logoutLabel.setForeground(new java.awt.Color(204, 204, 204));
+        logoutLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        logoutLabel.setText("LOGOUT");
+
+        javax.swing.GroupLayout logoutBtnLayout = new javax.swing.GroupLayout(logoutBtn);
+        logoutBtn.setLayout(logoutBtnLayout);
+        logoutBtnLayout.setHorizontalGroup(
+            logoutBtnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(logoutBtnLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(logoutLabel)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        logoutBtnLayout.setVerticalGroup(
+            logoutBtnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, logoutBtnLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(logoutLabel)
+                .addContainerGap())
+        );
+
+        background.add(logoutBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 440, -1, -1));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -441,15 +460,15 @@ public class ReportesView extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(background, javax.swing.GroupLayout.PREFERRED_SIZE, 467, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(background, javax.swing.GroupLayout.PREFERRED_SIZE, 477, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void usuarioTxtFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usuarioTxtFieldActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    }//GEN-LAST:event_usuarioTxtFieldActionPerformed
 
     private void asignarSucursalBtnMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_asignarSucursalBtnMouseEntered
         asignarSucursalBtn.setBackground(Color.gray);
@@ -477,6 +496,7 @@ public class ReportesView extends javax.swing.JFrame {
 
     private void asignarSucursalBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_asignarSucursalBtnMouseClicked
         AdministrarSucursalesView administrarSucursalesView = context.getBean(AdministrarSucursalesView.class);
+        administrarSucursalesView.setUsuario(usuarioSession);
         administrarSucursalesView.setVisible(true);
         administrarSucursalesView.setLocationRelativeTo(null);
 
@@ -485,6 +505,7 @@ public class ReportesView extends javax.swing.JFrame {
 
     private void registrarViajesBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_registrarViajesBtnMouseClicked
         RegistrarViajesView registrarViajesView = context.getBean(RegistrarViajesView.class);
+        registrarViajesView.setUsuario(usuarioSession);
         registrarViajesView.setVisible(true);
         registrarViajesView.setLocationRelativeTo(null);
 
@@ -498,9 +519,9 @@ public class ReportesView extends javax.swing.JFrame {
 
         Date fechaInicio = fechaInicioJDate.getDate();
         Date fechaFinal = fechaFinalJDate.getDate();
-        
+
         double totalKmsAcumulados = 0;
-        
+
         String transportistaNombre = String.valueOf(transportistasCmb.getSelectedItem());
 
         if (fechaInicio != null && fechaFinal != null) {
@@ -521,8 +542,24 @@ public class ReportesView extends javax.swing.JFrame {
 
     }//GEN-LAST:event_buscarBtnMouseClicked
 
+    private void logoutBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logoutBtnMouseClicked
+        usuarioSession.logOut();
+        LoginView loginView = context.getBean(LoginView.class
+        );
+        loginView.setVisible(true);
+        loginView.setLocationRelativeTo(null);
+        this.dispose();
+    }//GEN-LAST:event_logoutBtnMouseClicked
+
+    private void logoutBtnMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logoutBtnMouseEntered
+        // TODO add your handling code here:
+    }//GEN-LAST:event_logoutBtnMouseEntered
+
+    private void logoutBtnMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logoutBtnMouseExited
+        // TODO add your handling code here:
+    }//GEN-LAST:event_logoutBtnMouseExited
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel asignarBtn;
     private javax.swing.JPanel asignarSucursalBtn;
     private javax.swing.JPanel background;
     private javax.swing.JPanel barraSuperiorPanel;
@@ -532,13 +569,13 @@ public class ReportesView extends javax.swing.JFrame {
     private javax.swing.JLabel fechaLabel2;
     private javax.swing.JLabel fechaLabel3;
     private javax.swing.JLabel fechaLabel4;
-    private javax.swing.JLabel ingresarLabel;
     private javax.swing.JLabel ingresarLabel1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JPanel logoutBtn;
+    private javax.swing.JLabel logoutLabel;
     private javax.swing.JPanel menuDerechoPanel;
     private javax.swing.JPanel registrarViajesBtn;
     private javax.swing.JPanel reportesBtn;
@@ -550,5 +587,6 @@ public class ReportesView extends javax.swing.JFrame {
     private javax.swing.JTextField totalPagarTxtField;
     private javax.swing.JComboBox<String> transportistasCmb;
     private javax.swing.JLabel usuarioLabel;
+    private javax.swing.JTextField usuarioTxtField;
     // End of variables declaration//GEN-END:variables
 }

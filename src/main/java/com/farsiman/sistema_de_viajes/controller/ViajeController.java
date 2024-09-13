@@ -1,10 +1,6 @@
 package com.farsiman.sistema_de_viajes.controller;
 
-import com.farsiman.sistema_de_viajes.model.Colaborador;
-import com.farsiman.sistema_de_viajes.model.SucursalColaborador;
-import com.farsiman.sistema_de_viajes.model.Transportista;
-import com.farsiman.sistema_de_viajes.model.Usuario;
-import com.farsiman.sistema_de_viajes.model.Viaje;
+import com.farsiman.sistema_de_viajes.model.*;
 import com.farsiman.sistema_de_viajes.service.IViajeService;
 import java.util.Date;
 import java.util.List;
@@ -47,4 +43,10 @@ public class ViajeController {
         
         return viajeService.getViajesBetweenDates(fechaInicio, fechaFinal);
     }
+    
+        public boolean isColaboradorAvailable(Date fecha, List<Colaborador> colaboradores) {
+        List<Viaje> listViajes = viajeService.findByFechaAndColaboradoresIn(fecha, colaboradores);
+        return listViajes.isEmpty(); // Retorna true si no hay viajes para esos colaboradores en esa fecha
+    }
+
 }

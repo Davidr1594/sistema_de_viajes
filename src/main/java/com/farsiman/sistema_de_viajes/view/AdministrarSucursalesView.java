@@ -1,15 +1,10 @@
 package com.farsiman.sistema_de_viajes.view;
 
 import com.farsiman.sistema_de_viajes.controller.*;
-import com.farsiman.sistema_de_viajes.model.Colaborador;
-import com.farsiman.sistema_de_viajes.model.Sucursal;
-import com.farsiman.sistema_de_viajes.model.SucursalColaborador;
-import jakarta.annotation.PostConstruct;
+import com.farsiman.sistema_de_viajes.model.*;
 import java.awt.Color;
 import java.util.List;
-import java.util.Optional;
-import javax.swing.JDialog;
-import javax.swing.JOptionPane;
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,9 +24,10 @@ public class AdministrarSucursalesView extends javax.swing.JFrame {
     private ColaboradorController colaboradorControl;
     @Autowired
     private SucursalColaboradorController sucursalColaboradorController;
-
     @Autowired
     ApplicationContext context;
+    @Autowired
+    private Usuario usuarioSession;
 
     private Long sucursalId;
     private Long colaboradorId;
@@ -53,19 +49,33 @@ public class AdministrarSucursalesView extends javax.swing.JFrame {
     public AdministrarSucursalesView() {
         initComponents();
         this.setLocationRelativeTo(null);
-
     }
 
-    @PostConstruct
+    public void setUsuario(Usuario usuario) {
+        this.usuarioSession = usuario;
+        // Inicializa la vista usando el usuario
+        initView();
+    }
+
     private void initView() {
         configureSucursalesTableHeader();
         addSucursalesToTable();
 
         configureColaboradoresTableHeader();
         addColaboradoresToTable();
+
+        if (usuarioSession == null) {
+            throw new IllegalStateException("UsuarioSession no ha sido inyectado.");
+        }
+        usuarioTxtField.setText(usuarioSession.getNombre());
+
     }
 
     private void configureSucursalesTableHeader() {
+
+        tableModelSucursal.setColumnCount(0);
+        tableModelSucursal.setRowCount(0);
+
         JTableHeader header = sucursalesTable.getTableHeader();
         header.setBackground(Color.gray);
         sucursalesTable.setForeground(Color.white);
@@ -77,6 +87,9 @@ public class AdministrarSucursalesView extends javax.swing.JFrame {
     }
 
     private void configureColaboradoresTableHeader() {
+        tableModelColaboradores.setColumnCount(0);
+        tableModelColaboradores.setRowCount(0);
+
         JTableHeader header = sucursalesTable.getTableHeader();
         header.setBackground(Color.gray);
         colaboradoresTable.setForeground(Color.white);
@@ -151,6 +164,8 @@ public class AdministrarSucursalesView extends javax.swing.JFrame {
         kmTxtField = new javax.swing.JTextField();
         asignarBtn = new javax.swing.JPanel();
         ingresarLabel = new javax.swing.JLabel();
+        logoutBtn = new javax.swing.JPanel();
+        logoutLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -490,6 +505,45 @@ public class AdministrarSucursalesView extends javax.swing.JFrame {
 
         background.add(asignarBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 420, 100, 20));
 
+        logoutBtn.setBackground(new java.awt.Color(51, 0, 0));
+        logoutBtn.setForeground(new java.awt.Color(255, 255, 255));
+        logoutBtn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        logoutBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                logoutBtnMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                logoutBtnMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                logoutBtnMouseExited(evt);
+            }
+        });
+
+        logoutLabel.setBackground(new java.awt.Color(204, 204, 204));
+        logoutLabel.setForeground(new java.awt.Color(204, 204, 204));
+        logoutLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        logoutLabel.setText("LOGOUT");
+
+        javax.swing.GroupLayout logoutBtnLayout = new javax.swing.GroupLayout(logoutBtn);
+        logoutBtn.setLayout(logoutBtnLayout);
+        logoutBtnLayout.setHorizontalGroup(
+            logoutBtnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(logoutBtnLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(logoutLabel)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        logoutBtnLayout.setVerticalGroup(
+            logoutBtnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, logoutBtnLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(logoutLabel)
+                .addContainerGap())
+        );
+
+        background.add(logoutBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 440, -1, -1));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -498,7 +552,7 @@ public class AdministrarSucursalesView extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(background, javax.swing.GroupLayout.DEFAULT_SIZE, 468, Short.MAX_VALUE)
+            .addComponent(background, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -561,41 +615,45 @@ public class AdministrarSucursalesView extends javax.swing.JFrame {
         String sucursal = sucursalSeleccionadaTxtField.getText();
         String colaborador = colaboradorSeleccionadoTxtField.getText();
         String kmText = kmTxtField.getText(); // Capturar el texto del campo de kilómetros
+        if (usuarioSession.getRol().equals("admin")) {
+            if (kmText.isEmpty()) {
+                showMessage("Falta un campo por seleccionar", "Error", "Campos incompletos");
+            } else {
+                try {
+                    double kms = Double.parseDouble(kmText); // Intentar convertir a double
 
-        if (kmText.isEmpty()) {
-            showMessage("Falta un campo por seleccionar", "Error", "Campos incompletos");
-        } else {
-            try {
-                double kms = Double.parseDouble(kmText); // Intentar convertir a double
-
-                // Validar que los kilómetros estén en el rango permitido
-                if (kms <= 0 || kms > 50.00) {
-                    showMessage("Kms no pueden ser 0 o ser mayor a 50 kms", "Error", "Kms no valido");
-                } else {
-                    if (!sucursal.equals("") && !colaborador.equals("")) {
-                        // Verificar si ya existe la relación entre la sucursal y el colaborador
-                        boolean existsRelation = sucursalColaboradorController.existsRelation(sucursalId, colaboradorId);
-
-                        if (existsRelation) {
-                            showMessage("La relación ya existe entre el colaborador y la sucursal", "Error", "Duplicado");
-                        } else {
-                            // Si no existe, guardar la nueva relación
-                            sucursalColaboradorController.saveRelationSucursalColaborador(sucursalId, colaboradorId, kms);
-                            showMessage("Relación asignada", "Info", "Completado");
-                        }
+                    // Validar que los kilómetros estén en el rango permitido
+                    if (kms <= 0 || kms > 50.00) {
+                        showMessage("Kms no pueden ser 0 o ser mayor a 50 kms", "Error", "Kms no valido");
                     } else {
-                        showMessage("Falta un campo", "Error", "Campos incompletos");
+                        if (!sucursal.equals("") && !colaborador.equals("")) {
+                            // Verificar si ya existe la relación entre la sucursal y el colaborador
+                            boolean existsRelation = sucursalColaboradorController.existsRelation(sucursalId, colaboradorId);
+
+                            if (existsRelation) {
+                                showMessage("La relación ya existe entre el colaborador y la sucursal", "Error", "Duplicado");
+                            } else {
+                                // Si no existe, guardar la nueva relación
+                                sucursalColaboradorController.saveRelationSucursalColaborador(sucursalId, colaboradorId, kms);
+                                showMessage("Relación asignada", "Info", "Completado");
+                            }
+                        } else {
+                            showMessage("Falta un campo", "Error", "Campos incompletos");
+                        }
                     }
+                } catch (NumberFormatException e) {
+                    showMessage("No es un número válido", "Error", "Dato incorrecto");
                 }
-            } catch (NumberFormatException e) {
-                showMessage("No es un número válido", "Error", "Dato incorrecto");
             }
+        } else {
+            showMessage("Solo el admin puede asignar una relación Colaborador - Sucursal", "Error", "No se puedo asignar relación");
         }
     }//GEN-LAST:event_asignarBtnMouseClicked
 
     private void registrarViajesBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_registrarViajesBtnMouseClicked
         RegistrarViajesView registrarViajesView = context.getBean(RegistrarViajesView.class
         );
+        registrarViajesView.setUsuario(usuarioSession);
         registrarViajesView.setVisible(true);
         registrarViajesView.setLocationRelativeTo(null);
 
@@ -605,10 +663,29 @@ public class AdministrarSucursalesView extends javax.swing.JFrame {
     private void reportesBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_reportesBtnMouseClicked
         ReportesView reportesView = context.getBean(ReportesView.class
         );
+        reportesView.setUsuario(usuarioSession);
         reportesView.setVisible(true);
         reportesView.setLocationRelativeTo(null);
         this.dispose();
     }//GEN-LAST:event_reportesBtnMouseClicked
+
+    private void logoutBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logoutBtnMouseClicked
+        usuarioSession.logOut();
+        LoginView loginView = context.getBean(LoginView.class
+        );
+        loginView.setVisible(true);
+        loginView.setLocationRelativeTo(null);
+        this.dispose();
+
+    }//GEN-LAST:event_logoutBtnMouseClicked
+
+    private void logoutBtnMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logoutBtnMouseEntered
+        // TODO add your handling code here:
+    }//GEN-LAST:event_logoutBtnMouseEntered
+
+    private void logoutBtnMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logoutBtnMouseExited
+        // TODO add your handling code here:
+    }//GEN-LAST:event_logoutBtnMouseExited
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel asignarBtn;
@@ -628,6 +705,8 @@ public class AdministrarSucursalesView extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField2;
     private javax.swing.JLabel kmLabel;
     private javax.swing.JTextField kmTxtField;
+    private javax.swing.JPanel logoutBtn;
+    private javax.swing.JLabel logoutLabel;
     private javax.swing.JPanel menuDerechoPanel;
     private javax.swing.JPanel registrarViajesBtn;
     private javax.swing.JPanel reportesBtn;

@@ -5,6 +5,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import org.springframework.stereotype.Component;
 
 /**
  *
@@ -12,6 +13,7 @@ import jakarta.persistence.Table;
  */
 @Entity
 @Table(name = "usuarios")
+@Component
 public class Usuario {
 
     @Id
@@ -61,6 +63,13 @@ public class Usuario {
 
     public void setRol(String rol) {
         this.rol = rol;
+    }
+
+    public void logOut() {
+        this.id = null;
+        this.nombre = null;
+        this.contrasenia = null;
+        this.rol = null;
     }
 
 }

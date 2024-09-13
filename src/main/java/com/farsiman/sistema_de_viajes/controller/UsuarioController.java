@@ -17,23 +17,20 @@ public class UsuarioController {
     @Autowired
     private IUsuarioService usuarioService;
     
-    public boolean validUsuario(String nombre, String contrasenia){
+    public Usuario validUsuario(String nombre, String contrasenia){
         List<Usuario> listUsuarios = usuarioService.getUsuarios();
-        for(Usuario usr : listUsuarios){
-            System.out.println(usr.getNombre());
-        }
         
         for(Usuario usuario : listUsuarios){
             if (nombre.equals(usuario.getNombre())) {
                 if (contrasenia.equals(usuario.getContrasenia())) {
-                    return true;                    
+                    return usuario;                    
                 }
                 
             }
             
         }
         
-        return false;
+        return null;
     }
     
 }
