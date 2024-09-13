@@ -3,16 +3,15 @@ package com.farsiman.sistema_de_viajes.view;
 import com.farsiman.sistema_de_viajes.controller.SucursalColaboradorController;
 import com.farsiman.sistema_de_viajes.controller.TransportistaController;
 import com.farsiman.sistema_de_viajes.controller.ViajeController;
-import com.farsiman.sistema_de_viajes.model.Sucursal;
-import com.farsiman.sistema_de_viajes.model.SucursalColaborador;
 import com.farsiman.sistema_de_viajes.model.Transportista;
 import com.farsiman.sistema_de_viajes.model.Viaje;
-import com.toedter.calendar.JCalendar;
 import jakarta.annotation.PostConstruct;
 import java.awt.Color;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +34,13 @@ public class ReportesView extends javax.swing.JFrame {
     @Autowired
     ViajeController viajeControl;
 
-    DefaultTableModel tableModel = new DefaultTableModel();
+
+    DefaultTableModel tableModel = new DefaultTableModel() {
+        @Override
+        public boolean isCellEditable(int row, int column) {
+            return false;
+        }
+    };
 
     public ReportesView() {
         initComponents();
@@ -59,6 +64,7 @@ public class ReportesView extends javax.swing.JFrame {
     }
 
     private void configureViajeTableHeader() {
+
         JTableHeader header = reportesTable.getTableHeader();
         header.setBackground(Color.gray);
         reportesTable.setForeground(Color.white);
@@ -66,10 +72,33 @@ public class ReportesView extends javax.swing.JFrame {
         tableModel.addColumn("Transportista Nombre");
         tableModel.addColumn("Sucursal Nombre");
         tableModel.addColumn("Distancia Total");
-        tableModel.addColumn("Fecha");
+        tableModel.addColumn("tarifa por KM");
+        tableModel.addColumn("Fecha de viaje");
 
         reportesTable.setModel(tableModel);
 
+    }
+
+    private void showMessage(String message, String type, String title) {
+        JOptionPane optionPane = new JOptionPane(message);
+        if (type.equals("Info")) {
+            optionPane.setMessageType(JOptionPane.INFORMATION_MESSAGE);
+        } else if (type.equals("Error")) {
+            optionPane.setMessageType(JOptionPane.ERROR_MESSAGE);
+        }
+        JDialog dialog = optionPane.createDialog(title);
+        dialog.setAlwaysOnTop(true);
+        dialog.setVisible(true);
+    }
+
+    private void setTableEditableOff(DefaultTableModel table) {
+        DefaultTableModel tableModel = new DefaultTableModel() {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                // Hacemos todas las celdas no editables
+                return false;
+            }
+        };
     }
 
     @SuppressWarnings("unchecked")
@@ -103,6 +132,7 @@ public class ReportesView extends javax.swing.JFrame {
         fechaInicioJDate = new com.toedter.calendar.JDateChooser();
         buscarBtn = new javax.swing.JPanel();
         ingresarLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -188,7 +218,8 @@ public class ReportesView extends javax.swing.JFrame {
         background.add(textoInformaticoSeleccionLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 340, -1, -1));
 
         totalPagarTxtField.setBackground(new java.awt.Color(51, 51, 51));
-        background.add(totalPagarTxtField, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 340, 130, 20));
+        totalPagarTxtField.setForeground(new java.awt.Color(255, 255, 255));
+        background.add(totalPagarTxtField, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 340, 60, 20));
 
         asignarBtn.setBackground(new java.awt.Color(51, 51, 51));
         asignarBtn.setForeground(new java.awt.Color(102, 102, 102));
@@ -399,6 +430,9 @@ public class ReportesView extends javax.swing.JFrame {
 
         background.add(buscarBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 120, -1, 20));
 
+        jLabel2.setText("L.");
+        background.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 340, -1, -1));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -458,19 +492,30 @@ public class ReportesView extends javax.swing.JFrame {
     }//GEN-LAST:event_registrarViajesBtnMouseClicked
 
     private void buscarBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_buscarBtnMouseClicked
+        tableModel.setColumnCount(0);
+        tableModel.setRowCount(0);
+        configureViajeTableHeader();
+
         Date fechaInicio = fechaInicioJDate.getDate();
         Date fechaFinal = fechaFinalJDate.getDate();
-
+        
+        double totalKmsAcumulados = 0;
+        
         String transportistaNombre = String.valueOf(transportistasCmb.getSelectedItem());
 
         if (fechaInicio != null && fechaFinal != null) {
             if (transportistaNombre != null) {
                 List<Viaje> listViajes = viajeControl.getViajesBetweenDate(fechaInicio, fechaFinal);
                 for (Viaje viaje : listViajes) {
-                    
-                    tableModel.addRow(new Object[]{viaje.getId(),viaje.getTransportista().getNombre(),viaje.getSucursalColaborador().getSucursal().getNombre(),viaje.getDistanciaTotal(),viaje.getFecha()});
+                    if (viaje.getTransportista().getNombre().equals(transportistaNombre)) {
+                        tableModel.addRow(new Object[]{viaje.getId(), viaje.getTransportista().getNombre(), viaje.getSucursalColaborador().getSucursal().getNombre(), viaje.getDistanciaTotal(), viaje.getTransportista().getTarifaPorKM(), viaje.getFecha()});
+                        totalKmsAcumulados += viaje.getDistanciaTotal();
+                        totalPagarTxtField.setText(String.valueOf(totalKmsAcumulados * viaje.getTransportista().getTarifaPorKM()));
+                    }
                 }
             }
+        } else {
+            showMessage("Fechas no ingresadas", "Error", "Fecha no valida");
         }
 
 
@@ -534,6 +579,7 @@ public class ReportesView extends javax.swing.JFrame {
     private javax.swing.JLabel ingresarLabel;
     private javax.swing.JLabel ingresarLabel1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField jTextField1;

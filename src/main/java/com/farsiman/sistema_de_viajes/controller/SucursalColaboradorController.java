@@ -59,7 +59,9 @@ public class SucursalColaboradorController {
         }
         return null;
     }
-
+   public boolean existsRelation(Long sucursalId, Long colaboradorId) {
+        return sucursalColaboradorService.findRelation(sucursalId, colaboradorId).isPresent();
+    }
 
     
 }

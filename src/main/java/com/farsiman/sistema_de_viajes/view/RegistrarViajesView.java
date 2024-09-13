@@ -48,9 +48,19 @@ public class RegistrarViajesView extends javax.swing.JFrame {
     //Variable para acumular y restringir los Kms de un viaje
     double kmsAcumulados = 0.0;
 
-    DefaultTableModel tableModel = new DefaultTableModel();
-    DefaultTableModel tableModelColaboradoresSeleccionados = new DefaultTableModel();
-
+    DefaultTableModel tableModel = new DefaultTableModel() {
+        @Override
+        public boolean isCellEditable(int row, int column) {
+            return false;
+        }
+    };
+    
+    DefaultTableModel tableModelColaboradoresSeleccionados = new DefaultTableModel() {
+        @Override
+        public boolean isCellEditable(int row, int column) {
+            return false;
+        }
+    };
     public RegistrarViajesView() {
         initComponents();
         this.setLocationRelativeTo(null);

@@ -3,9 +3,11 @@ package com.farsiman.sistema_de_viajes.view;
 import com.farsiman.sistema_de_viajes.controller.*;
 import com.farsiman.sistema_de_viajes.model.Colaborador;
 import com.farsiman.sistema_de_viajes.model.Sucursal;
+import com.farsiman.sistema_de_viajes.model.SucursalColaborador;
 import jakarta.annotation.PostConstruct;
 import java.awt.Color;
 import java.util.List;
+import java.util.Optional;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -34,7 +36,19 @@ public class AdministrarSucursalesView extends javax.swing.JFrame {
     private Long sucursalId;
     private Long colaboradorId;
 
-    DefaultTableModel tableModel;
+    DefaultTableModel tableModelSucursal = new DefaultTableModel() {
+        @Override
+        public boolean isCellEditable(int row, int column) {
+            return false;
+        }
+    };
+
+    DefaultTableModel tableModelColaboradores = new DefaultTableModel() {
+        @Override
+        public boolean isCellEditable(int row, int column) {
+            return false;
+        }
+    };
 
     public AdministrarSucursalesView() {
         initComponents();
@@ -54,32 +68,30 @@ public class AdministrarSucursalesView extends javax.swing.JFrame {
     private void configureSucursalesTableHeader() {
         JTableHeader header = sucursalesTable.getTableHeader();
         header.setBackground(Color.gray);
-        tableModel = new DefaultTableModel();
         sucursalesTable.setForeground(Color.white);
-        tableModel.addColumn("Id");
-        tableModel.addColumn("Nombre");
-        tableModel.addColumn("Direccion");
+        tableModelSucursal.addColumn("Id");
+        tableModelSucursal.addColumn("Nombre");
+        tableModelSucursal.addColumn("Direccion");
 
-        sucursalesTable.setModel(tableModel);
+        sucursalesTable.setModel(tableModelSucursal);
     }
 
     private void configureColaboradoresTableHeader() {
         JTableHeader header = sucursalesTable.getTableHeader();
         header.setBackground(Color.gray);
-        tableModel = new DefaultTableModel();
         colaboradoresTable.setForeground(Color.white);
-        tableModel.addColumn("Id");
-        tableModel.addColumn("Nombre");
-        tableModel.addColumn("Apellido");
+        tableModelColaboradores.addColumn("Id");
+        tableModelColaboradores.addColumn("Nombre");
+        tableModelColaboradores.addColumn("Apellido");
 
-        colaboradoresTable.setModel(tableModel);
+        colaboradoresTable.setModel(tableModelColaboradores);
     }
 
     private void addSucursalesToTable() {
         List<Sucursal> listSucursales = sucursalControl.getSucursales();
 
         for (Sucursal sucursal : listSucursales) {
-            tableModel.addRow(new Object[]{sucursal.getId(), sucursal.getNombre(), sucursal.getDireccion()});
+            tableModelSucursal.addRow(new Object[]{sucursal.getId(), sucursal.getNombre(), sucursal.getDireccion()});
         }
 
     }
@@ -88,7 +100,7 @@ public class AdministrarSucursalesView extends javax.swing.JFrame {
         List<Colaborador> listColaboradores = colaboradorControl.getColaboradores();
 
         for (Colaborador colaborador : listColaboradores) {
-            tableModel.addRow(new Object[]{colaborador.getId(), colaborador.getNombre(), colaborador.getApellido()});
+            tableModelColaboradores.addRow(new Object[]{colaborador.getId(), colaborador.getNombre(), colaborador.getApellido()});
         }
 
     }
@@ -550,28 +562,40 @@ public class AdministrarSucursalesView extends javax.swing.JFrame {
         String colaborador = colaboradorSeleccionadoTxtField.getText();
         String kmText = kmTxtField.getText(); // Capturar el texto del campo de kilómetros
 
-        if (!sucursal.equals("") && !colaborador.equals("")) {
-            if (!kmText.equals("")) { // Validar que el campo de kilómetros no esté vacío
-                try {
-                    double kms = Double.valueOf(kmText); // Intentar convertir a double
-
-                    sucursalColaboradorController.saveRelationSucursalColaborador(sucursalId, colaboradorId, kms);
-                    showMessage("Relacion asignada", "Info", "Completado");
-                } catch (NumberFormatException e) {
-                    showMessage("No es un número válido", "Error", "Dato incorrecto");
-                }
-            } else {
-                showMessage("Falta un campo por seleccionar", "Error", "Campos incompletos");
-            }
+        if (kmText.isEmpty()) {
+            showMessage("Falta un campo por seleccionar", "Error", "Campos incompletos");
         } else {
-            showMessage("Falta un campo", "Error", "Campos incompletos");
+            try {
+                double kms = Double.parseDouble(kmText); // Intentar convertir a double
+
+                // Validar que los kilómetros estén en el rango permitido
+                if (kms <= 0 || kms > 50.00) {
+                    showMessage("Kms no pueden ser 0 o ser mayor a 50 kms", "Error", "Kms no valido");
+                } else {
+                    if (!sucursal.equals("") && !colaborador.equals("")) {
+                        // Verificar si ya existe la relación entre la sucursal y el colaborador
+                        boolean existsRelation = sucursalColaboradorController.existsRelation(sucursalId, colaboradorId);
+
+                        if (existsRelation) {
+                            showMessage("La relación ya existe entre el colaborador y la sucursal", "Error", "Duplicado");
+                        } else {
+                            // Si no existe, guardar la nueva relación
+                            sucursalColaboradorController.saveRelationSucursalColaborador(sucursalId, colaboradorId, kms);
+                            showMessage("Relación asignada", "Info", "Completado");
+                        }
+                    } else {
+                        showMessage("Falta un campo", "Error", "Campos incompletos");
+                    }
+                }
+            } catch (NumberFormatException e) {
+                showMessage("No es un número válido", "Error", "Dato incorrecto");
+            }
         }
-
-
     }//GEN-LAST:event_asignarBtnMouseClicked
 
     private void registrarViajesBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_registrarViajesBtnMouseClicked
-        RegistrarViajesView registrarViajesView = context.getBean(RegistrarViajesView.class);
+        RegistrarViajesView registrarViajesView = context.getBean(RegistrarViajesView.class
+        );
         registrarViajesView.setVisible(true);
         registrarViajesView.setLocationRelativeTo(null);
 
@@ -579,7 +603,8 @@ public class AdministrarSucursalesView extends javax.swing.JFrame {
     }//GEN-LAST:event_registrarViajesBtnMouseClicked
 
     private void reportesBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_reportesBtnMouseClicked
-        ReportesView reportesView = context.getBean(ReportesView.class);
+        ReportesView reportesView = context.getBean(ReportesView.class
+        );
         reportesView.setVisible(true);
         reportesView.setLocationRelativeTo(null);
         this.dispose();
@@ -599,16 +624,24 @@ public class AdministrarSucursalesView extends javax.swing.JFrame {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
+
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(AdministrarSucursalesView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AdministrarSucursalesView.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(AdministrarSucursalesView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AdministrarSucursalesView.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(AdministrarSucursalesView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AdministrarSucursalesView.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(AdministrarSucursalesView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AdministrarSucursalesView.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 

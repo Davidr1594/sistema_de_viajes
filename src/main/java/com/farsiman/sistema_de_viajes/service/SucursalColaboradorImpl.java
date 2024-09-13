@@ -4,6 +4,7 @@ import com.farsiman.sistema_de_viajes.model.SucursalColaborador;
 import com.farsiman.sistema_de_viajes.repository.ISucursalColaboradorRepository;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -40,6 +41,11 @@ public class SucursalColaboradorImpl implements ISucursalColaboradorService {
     @Override
     public void editSucursalColaborador(SucursalColaborador sucursalColaborador) {
         sucursalColaboradorRepo.save(sucursalColaborador);
+    }
+
+    @Override
+    public Optional<SucursalColaborador> findRelation(Long sucursalId, Long colaboradorId) {
+        return sucursalColaboradorRepo.findRelationBySucursalAndColaborador(sucursalId, colaboradorId);
     }
 
     
