@@ -1,8 +1,6 @@
 # TP Sistema de Viajes
 
-El objetivo de este proyecto integrador final es el de validar los conocimientos prácticos y
-técnicos referidos al desarrollo de APIs en el lenguaje de programación Java mediante Spring
-Boot para el curso “Desarrollo de APIs en Java con Spring Boot” de la TodoCode Academy.
+Sistema de viajes para registrar viajes de colaboradores por sucursal y llevar un registro por viaje y pagos hacia el transportista.
 
 ###  Requisitos
 JDK 17 o superior
