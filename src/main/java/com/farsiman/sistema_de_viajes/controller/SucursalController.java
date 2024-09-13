@@ -24,4 +24,15 @@ public class SucursalController {
     
     }
     
+    public Sucursal getSucursal(String nombreSucursal){
+        List<Sucursal> listSucursales = this.getSucursales();
+        for(Sucursal sucursal : listSucursales){
+            if (sucursal.equals(nombreSucursal)) {
+                return sucursal;
+                
+            }
+        }
+        return null;
+    }
+    
 }

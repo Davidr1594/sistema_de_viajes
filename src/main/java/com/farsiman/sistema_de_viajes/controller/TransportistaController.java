@@ -21,4 +21,16 @@ public class TransportistaController {
     public List<Transportista> getTransportistas(){
         return transportistaService.getTransportistas();
     }
+    
+    public Transportista getTransportista(String nombreTransportista){
+        
+        List<Transportista> listTransportistas = this.getTransportistas();
+        for(Transportista transportista : listTransportistas){
+            if (transportista.getNombre().equals(nombreTransportista)) {
+                return transportista;
+            }
+        }
+        
+        return null;
+    }
 }

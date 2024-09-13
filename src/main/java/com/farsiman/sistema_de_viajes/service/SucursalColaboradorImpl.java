@@ -2,6 +2,7 @@ package com.farsiman.sistema_de_viajes.service;
 
 import com.farsiman.sistema_de_viajes.model.SucursalColaborador;
 import com.farsiman.sistema_de_viajes.repository.ISucursalColaboradorRepository;
+import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,4 +42,5 @@ public class SucursalColaboradorImpl implements ISucursalColaboradorService {
         sucursalColaboradorRepo.save(sucursalColaborador);
     }
 
+    
 }

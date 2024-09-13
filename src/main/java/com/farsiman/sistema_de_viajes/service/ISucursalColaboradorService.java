@@ -1,6 +1,7 @@
 package com.farsiman.sistema_de_viajes.service;
 
 import com.farsiman.sistema_de_viajes.model.SucursalColaborador;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -18,5 +19,5 @@ public interface ISucursalColaboradorService {
     public SucursalColaborador findSucursalColaborador(Long id);
 
     public void editSucursalColaborador(SucursalColaborador sucursalColaborador);
-
+    
 }

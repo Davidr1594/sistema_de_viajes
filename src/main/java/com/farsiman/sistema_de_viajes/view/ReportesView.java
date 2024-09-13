@@ -1,6 +1,20 @@
 package com.farsiman.sistema_de_viajes.view;
 
+import com.farsiman.sistema_de_viajes.controller.SucursalColaboradorController;
+import com.farsiman.sistema_de_viajes.controller.TransportistaController;
+import com.farsiman.sistema_de_viajes.controller.ViajeController;
+import com.farsiman.sistema_de_viajes.model.Sucursal;
+import com.farsiman.sistema_de_viajes.model.SucursalColaborador;
+import com.farsiman.sistema_de_viajes.model.Transportista;
+import com.farsiman.sistema_de_viajes.model.Viaje;
+import com.toedter.calendar.JCalendar;
+import jakarta.annotation.PostConstruct;
 import java.awt.Color;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
@@ -13,11 +27,49 @@ import org.springframework.stereotype.Component;
 public class ReportesView extends javax.swing.JFrame {
 
     @Autowired
+    TransportistaController transportistaControl;
+    @Autowired
     ApplicationContext context;
+    @Autowired
+    SucursalColaboradorController sucursalColaboradoresControl;
+    @Autowired
+    ViajeController viajeControl;
+
+    DefaultTableModel tableModel = new DefaultTableModel();
 
     public ReportesView() {
         initComponents();
         this.setLocationRelativeTo(null);
+    }
+
+    @PostConstruct
+    private void initView() {
+
+        configureTransportistaCmb();
+        configureViajeTableHeader();
+
+    }
+
+    private void configureTransportistaCmb() {
+        List<Transportista> listTransportistas = transportistaControl.getTransportistas();
+
+        for (Transportista transportista : listTransportistas) {
+            transportistasCmb.addItem(transportista.getNombre());
+        }
+    }
+
+    private void configureViajeTableHeader() {
+        JTableHeader header = reportesTable.getTableHeader();
+        header.setBackground(Color.gray);
+        reportesTable.setForeground(Color.white);
+        tableModel.addColumn("Viaje ID");
+        tableModel.addColumn("Transportista Nombre");
+        tableModel.addColumn("Sucursal Nombre");
+        tableModel.addColumn("Distancia Total");
+        tableModel.addColumn("Fecha");
+
+        reportesTable.setModel(tableModel);
+
     }
 
     @SuppressWarnings("unchecked")
@@ -31,17 +83,15 @@ public class ReportesView extends javax.swing.JFrame {
         usuarioLabel = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        colaboradoresTable = new javax.swing.JTable();
+        reportesTable = new javax.swing.JTable();
         textoInformaticoSeleccionLabel = new javax.swing.JLabel();
-        kmTxtField = new javax.swing.JTextField();
+        totalPagarTxtField = new javax.swing.JTextField();
         asignarBtn = new javax.swing.JPanel();
         ingresarLabel = new javax.swing.JLabel();
-        sucursalSeleccionadaTxtField1 = new javax.swing.JTextField();
         fechaLabel2 = new javax.swing.JLabel();
         fechaLabel3 = new javax.swing.JLabel();
-        sucursalSeleccionadaTxtField2 = new javax.swing.JTextField();
         fechaLabel4 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        transportistasCmb = new javax.swing.JComboBox<>();
         menuDerechoPanel = new javax.swing.JPanel();
         asignarSucursalBtn = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -49,6 +99,10 @@ public class ReportesView extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         reportesBtn = new javax.swing.JPanel();
         reportesLabel = new javax.swing.JLabel();
+        fechaFinalJDate = new com.toedter.calendar.JDateChooser();
+        fechaInicioJDate = new com.toedter.calendar.JDateChooser();
+        buscarBtn = new javax.swing.JPanel();
+        ingresarLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -97,11 +151,9 @@ public class ReportesView extends javax.swing.JFrame {
         );
         barraSuperiorPanelLayout.setVerticalGroup(
             barraSuperiorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(barraSuperiorPanelLayout.createSequentialGroup()
-                .addGroup(barraSuperiorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(tituloEsquinaLabel1)
-                    .addComponent(tituloEsquinaLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(barraSuperiorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(tituloEsquinaLabel1)
+                .addComponent(tituloEsquinaLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(barraSuperiorPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(barraSuperiorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -112,8 +164,9 @@ public class ReportesView extends javax.swing.JFrame {
 
         background.add(barraSuperiorPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 880, 30));
 
-        colaboradoresTable.setBackground(new java.awt.Color(51, 51, 51));
-        colaboradoresTable.setModel(new javax.swing.table.DefaultTableModel(
+        reportesTable.setBackground(new java.awt.Color(51, 51, 51));
+        reportesTable.setForeground(new java.awt.Color(255, 255, 255));
+        reportesTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -124,7 +177,7 @@ public class ReportesView extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(colaboradoresTable);
+        jScrollPane1.setViewportView(reportesTable);
 
         background.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 160, 670, 140));
 
@@ -134,8 +187,8 @@ public class ReportesView extends javax.swing.JFrame {
         textoInformaticoSeleccionLabel.setText("Cantidad todal a pagar:");
         background.add(textoInformaticoSeleccionLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 340, -1, -1));
 
-        kmTxtField.setBackground(new java.awt.Color(51, 51, 51));
-        background.add(kmTxtField, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 340, 130, 20));
+        totalPagarTxtField.setBackground(new java.awt.Color(51, 51, 51));
+        background.add(totalPagarTxtField, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 340, 130, 20));
 
         asignarBtn.setBackground(new java.awt.Color(51, 51, 51));
         asignarBtn.setForeground(new java.awt.Color(102, 102, 102));
@@ -164,14 +217,11 @@ public class ReportesView extends javax.swing.JFrame {
 
         background.add(asignarBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 410, 100, 20));
 
-        sucursalSeleccionadaTxtField1.setBackground(new java.awt.Color(51, 51, 51));
-        background.add(sucursalSeleccionadaTxtField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 120, 130, 20));
-
         fechaLabel2.setBackground(new java.awt.Color(255, 255, 255));
         fechaLabel2.setFont(new java.awt.Font("Calibri Light", 1, 14)); // NOI18N
         fechaLabel2.setForeground(new java.awt.Color(255, 255, 255));
         fechaLabel2.setText("al");
-        background.add(fechaLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 120, -1, -1));
+        background.add(fechaLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 120, 10, -1));
 
         fechaLabel3.setBackground(new java.awt.Color(255, 255, 255));
         fechaLabel3.setFont(new java.awt.Font("Calibri Light", 1, 14)); // NOI18N
@@ -179,17 +229,15 @@ public class ReportesView extends javax.swing.JFrame {
         fechaLabel3.setText("Seleccione un Transportista: ");
         background.add(fechaLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 70, -1, -1));
 
-        sucursalSeleccionadaTxtField2.setBackground(new java.awt.Color(51, 51, 51));
-        background.add(sucursalSeleccionadaTxtField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 120, 130, 20));
-
         fechaLabel4.setBackground(new java.awt.Color(255, 255, 255));
         fechaLabel4.setFont(new java.awt.Font("Calibri Light", 1, 14)); // NOI18N
         fechaLabel4.setForeground(new java.awt.Color(255, 255, 255));
-        fechaLabel4.setText("Rando de fecha desde: ");
+        fechaLabel4.setText("Rango de fecha desde: ");
         background.add(fechaLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 120, -1, -1));
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        background.add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 70, 180, 20));
+        transportistasCmb.setBackground(new java.awt.Color(51, 51, 51));
+        transportistasCmb.setForeground(new java.awt.Color(204, 204, 204));
+        background.add(transportistasCmb, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 70, 180, 20));
 
         menuDerechoPanel.setBackground(new java.awt.Color(51, 51, 51));
         menuDerechoPanel.setForeground(new java.awt.Color(51, 51, 51));
@@ -311,6 +359,46 @@ public class ReportesView extends javax.swing.JFrame {
 
         background.add(menuDerechoPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 180, 120, 120));
 
+        fechaFinalJDate.setBackground(new java.awt.Color(51, 51, 51));
+        fechaFinalJDate.setForeground(new java.awt.Color(255, 255, 255));
+        background.add(fechaFinalJDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 120, 120, 20));
+
+        fechaInicioJDate.setBackground(new java.awt.Color(51, 51, 51));
+        fechaInicioJDate.setForeground(new java.awt.Color(255, 255, 255));
+        background.add(fechaInicioJDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 120, 120, 20));
+
+        buscarBtn.setBackground(new java.awt.Color(51, 51, 51));
+        buscarBtn.setForeground(new java.awt.Color(102, 102, 102));
+        buscarBtn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        buscarBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                buscarBtnMouseClicked(evt);
+            }
+        });
+
+        ingresarLabel1.setFont(new java.awt.Font("Calibri Light", 1, 14)); // NOI18N
+        ingresarLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        ingresarLabel1.setText("Buscar");
+        ingresarLabel1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+
+        javax.swing.GroupLayout buscarBtnLayout = new javax.swing.GroupLayout(buscarBtn);
+        buscarBtn.setLayout(buscarBtnLayout);
+        buscarBtnLayout.setHorizontalGroup(
+            buscarBtnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(buscarBtnLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(ingresarLabel1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        buscarBtnLayout.setVerticalGroup(
+            buscarBtnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, buscarBtnLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(ingresarLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+
+        background.add(buscarBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 120, -1, 20));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -369,6 +457,25 @@ public class ReportesView extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_registrarViajesBtnMouseClicked
 
+    private void buscarBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_buscarBtnMouseClicked
+        Date fechaInicio = fechaInicioJDate.getDate();
+        Date fechaFinal = fechaFinalJDate.getDate();
+
+        String transportistaNombre = String.valueOf(transportistasCmb.getSelectedItem());
+
+        if (fechaInicio != null && fechaFinal != null) {
+            if (transportistaNombre != null) {
+                List<Viaje> listViajes = viajeControl.getViajesBetweenDate(fechaInicio, fechaFinal);
+                for (Viaje viaje : listViajes) {
+                    
+                    tableModel.addRow(new Object[]{viaje.getId(),viaje.getTransportista().getNombre(),viaje.getSucursalColaborador().getSucursal().getNombre(),viaje.getDistanciaTotal(),viaje.getFecha()});
+                }
+            }
+        }
+
+
+    }//GEN-LAST:event_buscarBtnMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -383,16 +490,24 @@ public class ReportesView extends javax.swing.JFrame {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
+
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ReportesView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ReportesView.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ReportesView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ReportesView.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ReportesView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ReportesView.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ReportesView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ReportesView.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
         //</editor-fold>
@@ -410,26 +525,28 @@ public class ReportesView extends javax.swing.JFrame {
     private javax.swing.JPanel asignarSucursalBtn;
     private javax.swing.JPanel background;
     private javax.swing.JPanel barraSuperiorPanel;
-    private javax.swing.JTable colaboradoresTable;
+    private javax.swing.JPanel buscarBtn;
+    private com.toedter.calendar.JDateChooser fechaFinalJDate;
+    private com.toedter.calendar.JDateChooser fechaInicioJDate;
     private javax.swing.JLabel fechaLabel2;
     private javax.swing.JLabel fechaLabel3;
     private javax.swing.JLabel fechaLabel4;
     private javax.swing.JLabel ingresarLabel;
-    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JLabel ingresarLabel1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField kmTxtField;
     private javax.swing.JPanel menuDerechoPanel;
     private javax.swing.JPanel registrarViajesBtn;
     private javax.swing.JPanel reportesBtn;
     private javax.swing.JLabel reportesLabel;
-    private javax.swing.JTextField sucursalSeleccionadaTxtField1;
-    private javax.swing.JTextField sucursalSeleccionadaTxtField2;
+    private javax.swing.JTable reportesTable;
     private javax.swing.JLabel textoInformaticoSeleccionLabel;
     private javax.swing.JLabel tituloEsquinaLabel1;
     private javax.swing.JLabel tituloEsquinaLabel2;
+    private javax.swing.JTextField totalPagarTxtField;
+    private javax.swing.JComboBox<String> transportistasCmb;
     private javax.swing.JLabel usuarioLabel;
     // End of variables declaration//GEN-END:variables
 }

@@ -4,19 +4,21 @@ import com.farsiman.sistema_de_viajes.controller.ColaboradorController;
 import com.farsiman.sistema_de_viajes.controller.SucursalColaboradorController;
 import com.farsiman.sistema_de_viajes.controller.SucursalController;
 import com.farsiman.sistema_de_viajes.controller.TransportistaController;
+import com.farsiman.sistema_de_viajes.controller.ViajeController;
 import com.farsiman.sistema_de_viajes.model.Colaborador;
 import com.farsiman.sistema_de_viajes.model.Sucursal;
 import com.farsiman.sistema_de_viajes.model.SucursalColaborador;
 import com.farsiman.sistema_de_viajes.model.Transportista;
+import com.farsiman.sistema_de_viajes.model.Usuario;
 import jakarta.annotation.PostConstruct;
 import java.awt.Color;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
-import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
-import javax.swing.table.TableModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
@@ -36,6 +38,8 @@ public class RegistrarViajesView extends javax.swing.JFrame {
     TransportistaController transportistaControl;
     @Autowired
     SucursalColaboradorController sucursalColaboradorControl;
+    @Autowired
+    ViajeController viajeControl;
     @Autowired
     ApplicationContext context;
 
@@ -127,7 +131,6 @@ public class RegistrarViajesView extends javax.swing.JFrame {
         colaboradoresSeleccionadostable = new javax.swing.JTable();
         transportistaLabel = new javax.swing.JLabel();
         fechaLabel = new javax.swing.JLabel();
-        fechaTxtField = new javax.swing.JTextField();
         registrarBtn = new javax.swing.JPanel();
         ingresarLabel = new javax.swing.JLabel();
         transportistaCmb = new javax.swing.JComboBox<>();
@@ -146,6 +149,7 @@ public class RegistrarViajesView extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         reportesBtn = new javax.swing.JPanel();
         reportesLabel = new javax.swing.JLabel();
+        fechaJDate = new com.toedter.calendar.JDateChooser();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -199,12 +203,10 @@ public class RegistrarViajesView extends javax.swing.JFrame {
                 .addGroup(barraSuperiorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(usuarioLabel))
-                .addContainerGap(8, Short.MAX_VALUE))
-            .addGroup(barraSuperiorPanelLayout.createSequentialGroup()
-                .addGroup(barraSuperiorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(tituloEsquinaLabel1)
-                    .addComponent(tituloEsquinaLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(barraSuperiorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(tituloEsquinaLabel1)
+                .addComponent(tituloEsquinaLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
         );
 
         background.add(barraSuperiorPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 880, 30));
@@ -230,26 +232,28 @@ public class RegistrarViajesView extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(colaboradoresSeleccionadostable);
 
-        background.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 220, 630, 100));
+        background.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 220, 700, 100));
 
         transportistaLabel.setBackground(new java.awt.Color(255, 255, 255));
         transportistaLabel.setFont(new java.awt.Font("Calibri Light", 1, 14)); // NOI18N
         transportistaLabel.setForeground(new java.awt.Color(204, 204, 204));
         transportistaLabel.setText("Transportista:");
-        background.add(transportistaLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 330, -1, -1));
+        background.add(transportistaLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 330, -1, -1));
 
         fechaLabel.setBackground(new java.awt.Color(255, 255, 255));
         fechaLabel.setFont(new java.awt.Font("Calibri Light", 1, 14)); // NOI18N
         fechaLabel.setForeground(new java.awt.Color(204, 204, 204));
         fechaLabel.setText("Fecha: ");
-        background.add(fechaLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 370, -1, -1));
-
-        fechaTxtField.setBackground(new java.awt.Color(51, 51, 51));
-        background.add(fechaTxtField, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 370, 150, 20));
+        background.add(fechaLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 330, -1, -1));
 
         registrarBtn.setBackground(new java.awt.Color(51, 51, 51));
         registrarBtn.setForeground(new java.awt.Color(102, 102, 102));
         registrarBtn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        registrarBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                registrarBtnMouseClicked(evt);
+            }
+        });
 
         ingresarLabel.setFont(new java.awt.Font("Calibri Light", 1, 14)); // NOI18N
         ingresarLabel.setForeground(new java.awt.Color(255, 255, 255));
@@ -272,11 +276,11 @@ public class RegistrarViajesView extends javax.swing.JFrame {
                 .addComponent(ingresarLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        background.add(registrarBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 410, 100, 20));
+        background.add(registrarBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 390, 100, 20));
 
         transportistaCmb.setBackground(new java.awt.Color(51, 51, 51));
         transportistaCmb.setForeground(new java.awt.Color(255, 255, 255));
-        background.add(transportistaCmb, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 330, 150, 20));
+        background.add(transportistaCmb, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 330, 150, 20));
 
         sucursalesCmb.setBackground(new java.awt.Color(51, 51, 51));
         sucursalesCmb.setForeground(new java.awt.Color(255, 255, 255));
@@ -316,7 +320,7 @@ public class RegistrarViajesView extends javax.swing.JFrame {
         });
         jScrollPane2.setViewportView(colaboradoresTable);
 
-        background.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 80, 630, 100));
+        background.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 80, 700, 100));
 
         buscaBtn.setBackground(new java.awt.Color(51, 51, 51));
         buscaBtn.setForeground(new java.awt.Color(204, 204, 204));
@@ -477,15 +481,19 @@ public class RegistrarViajesView extends javax.swing.JFrame {
 
         background.add(menuDerechoPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 180, 120, 120));
 
+        fechaJDate.setBackground(new java.awt.Color(51, 51, 51));
+        fechaJDate.setForeground(new java.awt.Color(255, 255, 255));
+        background.add(fechaJDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 330, 150, 20));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(background, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(background, javax.swing.GroupLayout.DEFAULT_SIZE, 892, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(background, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(background, javax.swing.GroupLayout.DEFAULT_SIZE, 432, Short.MAX_VALUE)
         );
 
         pack();
@@ -497,11 +505,6 @@ public class RegistrarViajesView extends javax.swing.JFrame {
 
     private void sucursalesCmbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sucursalesCmbActionPerformed
 
-        int selectedIndex = sucursalesCmb.getSelectedIndex();
-        if (selectedIndex >= 0) {
-            Sucursal sucursalSeleccionada = sucursalControl.getSucursales().get(selectedIndex);
-            sucursalSeleccionadaGlobal = sucursalSeleccionada;
-        }
 
     }//GEN-LAST:event_sucursalesCmbActionPerformed
 
@@ -510,18 +513,23 @@ public class RegistrarViajesView extends javax.swing.JFrame {
         tableModel.setRowCount(0);
         tableModelColaboradoresSeleccionados.setColumnCount(0);
         tableModelColaboradoresSeleccionados.setRowCount(0);
+        kmTxtField.setText("");
         configureColaboradoresTableHeader();
         configureColaboradoresSeleccionadosTableHeader();
 
         String nombre = String.valueOf(sucursalesCmb.getSelectedItem());
 
-        List<SucursalColaborador> listColaboradores = sucursalSeleccionadaGlobal.getSucursalColaboradores();
-        for (SucursalColaborador sucursalColaborador : listColaboradores) {
-            if (sucursalColaborador.getSucursal().getNombre().equals(nombre)) {
-                tableModel.addRow(new Object[]{sucursalColaborador.getId(), sucursalColaborador.getDistancia(), sucursalColaborador.getColaborador().getNombre(), sucursalColaborador.getColaborador().getId()});
+        if (nombre != null) {
+            List<SucursalColaborador> listSucursalColaborador = sucursalColaboradorControl.getSucursalColaboradores();
+            if (listSucursalColaborador != null) {
+                for (SucursalColaborador sucursalColaborador : listSucursalColaborador) {
+                    tableModel.addRow(new Object[]{sucursalColaborador.getId(), sucursalColaborador.getDistancia(), sucursalColaborador.getColaborador().getNombre(), sucursalColaborador.getColaborador().getId()});
+
+                }
             }
+        }
     }//GEN-LAST:event_buscaBtnMouseClicked
-    }
+
     private void colaboradoresTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_colaboradoresTableMouseClicked
 // Obtener el ID del colaborador seleccionado de la tabla de colaboradores
         Long colaboradorSucursalId = (Long) colaboradoresTable.getValueAt(colaboradoresTable.getSelectedRow(), 0);
@@ -605,6 +613,64 @@ public class RegistrarViajesView extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_asignarSucursalBtnMouseClicked
 
+    private void registrarBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_registrarBtnMouseClicked
+        Date fecha = fechaJDate.getDate();
+        SucursalColaborador sucursalColaborador = null;
+        Transportista transportista = null;
+        List<Colaborador> listColaboradoresTotalViaje = new ArrayList<Colaborador>();
+        double kmsTotal;
+        
+        Usuario userPrueba = new Usuario(1L, "DavidUsuario","1234", "admin");
+
+        String kmsText = kmTxtField.getText();
+        System.out.println("KmText: "+ kmsText);
+
+        if (kmsText != null && !kmsText.isEmpty()) {
+            kmsTotal = Double.parseDouble(kmsText);
+            System.out.println("KmsTotal: "+kmsTotal);
+        } else {
+            showMessage("El campo de kilómetros está vacío", "Error", "Kilómetros inválido");
+            return;  // Salir del método si el campo es inválido
+        }
+
+        //Asignar un transportista a variable transportista
+        String nombreTransportista = String.valueOf(transportistaCmb.getSelectedItem());
+        System.out.println("nombreTransportista: " +nombreTransportista);
+        if (nombreTransportista != null) {
+            transportista = transportistaControl.getTransportista(nombreTransportista);
+        } else {
+            showMessage("No se ha seleccionado ningun transportista", "Error", "Transportista null");
+        }
+
+        //asignar una sucursal a la variable sucursal
+        String nombreSucursal = String.valueOf(sucursalesCmb.getSelectedItem());
+        if (nombreSucursal != null) {
+            sucursalColaborador = sucursalColaboradorControl.getSucursalColaborador(nombreSucursal);
+       
+                    } else {
+            showMessage("No se ha seleccionado ninguna sucursal", "error", "Sucursal null");
+        }
+
+        //Crea un list de idColaboradores para mandar a guardar todos los empleados seleccionados 
+        List<Long> listIdColaboradores = new ArrayList<Long>();
+
+        for (int i = 0; i < colaboradoresSeleccionadostable.getRowCount(); i++) {
+            Long idEmpleados = (Long) colaboradoresSeleccionadostable.getValueAt(i, 0);
+            listIdColaboradores.add(idEmpleados);
+        }
+
+        listColaboradoresTotalViaje = colaboradorControl.getColaboradores(listIdColaboradores);
+        
+        //Se asignan todas las variables a ViajeController para cargar los datos a la BD
+        boolean isViajeTrue = viajeControl.saveViaje(fecha, sucursalColaborador, transportista, listColaboradoresTotalViaje, userPrueba, kmsTotal);
+        if (isViajeTrue) {
+            showMessage("Viaje registrado Exitosamente", "Info", "Viaje Guardado");
+        }else{
+            showMessage("Viaje no registrado", "Error", "Viaje no guardado");
+        }
+        
+    }//GEN-LAST:event_registrarBtnMouseClicked
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel SucursalesSeleccionadosLabel;
     private javax.swing.JPanel asignarSucursalBtn;
@@ -615,8 +681,8 @@ public class RegistrarViajesView extends javax.swing.JFrame {
     private javax.swing.JLabel colaboradoresSeleccionadosLabel;
     private javax.swing.JTable colaboradoresSeleccionadostable;
     private javax.swing.JTable colaboradoresTable;
+    private com.toedter.calendar.JDateChooser fechaJDate;
     private javax.swing.JLabel fechaLabel;
-    private javax.swing.JTextField fechaTxtField;
     private javax.swing.JLabel ingresarLabel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel5;

@@ -540,7 +540,7 @@ public class AdministrarSucursalesView extends javax.swing.JFrame {
 
     private void colaboradoresTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_colaboradoresTableMouseClicked
 
-        colaboradorSeleccionadoTxtField.setText(String.valueOf(colaboradoresTable.getValueAt(colaboradoresTable.getSelectedRow(), 2)));
+        colaboradorSeleccionadoTxtField.setText(String.valueOf(colaboradoresTable.getValueAt(colaboradoresTable.getSelectedRow(), 1)));
         this.colaboradorId = (Long) colaboradoresTable.getValueAt(colaboradoresTable.getSelectedRow(), 0);
 
     }//GEN-LAST:event_colaboradoresTableMouseClicked
