@@ -70,8 +70,8 @@ La aplicación proporciona una interfaz gráfica para la gestión de viajes de s
 
 Puedes realizar las siguientes acciones:
 
-Administrar sucursales: Añadir relación con una sucursal y un colaborador, asignar kms de distancia del colaborador con la sucursal, ver listas de sucursales y colaboradores.
-Registrar Viajes: Registrar un viaje desde una sucursal seleccionada, asigna fecha y los colaboradores para cada viaje.
+Administrar sucursales: Añadir relación con una sucursal y un colaborador, asignar kms de distancia del colaborador con la sucursal, ver listas de sucursales y colaboradores.\
+Registrar Viajes: Registrar un viaje desde una sucursal seleccionada, asigna fecha y los colaboradores para cada viaje.\
 Reportes: Filtra por rango de fechas y por transportista opara obtener un listado de los viajes realizados por el transportitas y un total a pagar.
 
 
