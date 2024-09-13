@@ -74,10 +74,30 @@ Administrar sucursales: Añadir relación con una sucursal y un colaborador, asi
 Registrar Viajes: Registrar un viaje desde una sucursal seleccionada, asigna fecha y los colaboradores para cada viaje.\
 Reportes: Filtra por rango de fechas y por transportista opara obtener un listado de los viajes realizados por el transportitas y un total a pagar.
 
+### Usuarios y roles:
+Rol\
+admin = tiene permiso para asignar sucursales.\
+gerenteTienda = tiene permiso para registrar un viaje pero no para asignar tienda.\
+user = solo puede navegar por el sistema pero no tiene ningun permiso.
+
+Usuarios registrados:
+
+Usuario: Davidr\
+Contraseña: 1234\
+Rol: admin
+
+Usuario: IDaniel03\
+Contraseña: 1234\
+Rol: gerenteTienda 
+
+Usuario: Erick\
+Contraseña: 1234\
+Rol: user
 
 
 ### Competencias Técnicas 
 
 Se aplican patrones de diseño y arquitectura de software como inyección de dependencias, patrón MVC, DAOs, Singleton, arquitectura multicapa e integración continua con GitHub Actions. Este flujo de trabajo asegura que cada push se construya, pruebe y empaquete automáticamente, garantizando que cualquier cambio en el código sea verificado después de realizar cada commit.
+
 
 
