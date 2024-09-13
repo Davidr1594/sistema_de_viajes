@@ -54,13 +54,14 @@ public class RegistrarViajesView extends javax.swing.JFrame {
             return false;
         }
     };
-    
+
     DefaultTableModel tableModelColaboradoresSeleccionados = new DefaultTableModel() {
         @Override
         public boolean isCellEditable(int row, int column) {
             return false;
         }
     };
+
     public RegistrarViajesView() {
         initComponents();
         this.setLocationRelativeTo(null);
@@ -533,8 +534,10 @@ public class RegistrarViajesView extends javax.swing.JFrame {
             List<SucursalColaborador> listSucursalColaborador = sucursalColaboradorControl.getSucursalColaboradores();
             if (listSucursalColaborador != null) {
                 for (SucursalColaborador sucursalColaborador : listSucursalColaborador) {
-                    tableModel.addRow(new Object[]{sucursalColaborador.getId(), sucursalColaborador.getDistancia(), sucursalColaborador.getColaborador().getNombre(), sucursalColaborador.getColaborador().getId()});
+                    if (sucursalColaborador.getSucursal().getNombre().equals(nombre)) {
+                        tableModel.addRow(new Object[]{sucursalColaborador.getId(), sucursalColaborador.getDistancia(), sucursalColaborador.getColaborador().getNombre(), sucursalColaborador.getColaborador().getId()});
 
+                    }
                 }
             }
         }
@@ -629,15 +632,15 @@ public class RegistrarViajesView extends javax.swing.JFrame {
         Transportista transportista = null;
         List<Colaborador> listColaboradoresTotalViaje = new ArrayList<Colaborador>();
         double kmsTotal;
-        
-        Usuario userPrueba = new Usuario(1L, "DavidUsuario","1234", "admin");
+
+        Usuario userPrueba = new Usuario(1L, "DavidUsuario", "1234", "admin");
 
         String kmsText = kmTxtField.getText();
-        System.out.println("KmText: "+ kmsText);
+        System.out.println("KmText: " + kmsText);
 
         if (kmsText != null && !kmsText.isEmpty()) {
             kmsTotal = Double.parseDouble(kmsText);
-            System.out.println("KmsTotal: "+kmsTotal);
+            System.out.println("KmsTotal: " + kmsTotal);
         } else {
             showMessage("El campo de kilómetros está vacío", "Error", "Kilómetros inválido");
             return;  // Salir del método si el campo es inválido
@@ -645,7 +648,7 @@ public class RegistrarViajesView extends javax.swing.JFrame {
 
         //Asignar un transportista a variable transportista
         String nombreTransportista = String.valueOf(transportistaCmb.getSelectedItem());
-        System.out.println("nombreTransportista: " +nombreTransportista);
+        System.out.println("nombreTransportista: " + nombreTransportista);
         if (nombreTransportista != null) {
             transportista = transportistaControl.getTransportista(nombreTransportista);
         } else {
@@ -656,8 +659,8 @@ public class RegistrarViajesView extends javax.swing.JFrame {
         String nombreSucursal = String.valueOf(sucursalesCmb.getSelectedItem());
         if (nombreSucursal != null) {
             sucursalColaborador = sucursalColaboradorControl.getSucursalColaborador(nombreSucursal);
-       
-                    } else {
+
+        } else {
             showMessage("No se ha seleccionado ninguna sucursal", "error", "Sucursal null");
         }
 
@@ -670,15 +673,15 @@ public class RegistrarViajesView extends javax.swing.JFrame {
         }
 
         listColaboradoresTotalViaje = colaboradorControl.getColaboradores(listIdColaboradores);
-        
+
         //Se asignan todas las variables a ViajeController para cargar los datos a la BD
         boolean isViajeTrue = viajeControl.saveViaje(fecha, sucursalColaborador, transportista, listColaboradoresTotalViaje, userPrueba, kmsTotal);
         if (isViajeTrue) {
             showMessage("Viaje registrado Exitosamente", "Info", "Viaje Guardado");
-        }else{
+        } else {
             showMessage("Viaje no registrado", "Error", "Viaje no guardado");
         }
-        
+
     }//GEN-LAST:event_registrarBtnMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
