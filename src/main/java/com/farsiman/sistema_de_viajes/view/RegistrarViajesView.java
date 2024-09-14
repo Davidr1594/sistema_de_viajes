@@ -669,7 +669,7 @@ public class RegistrarViajesView extends javax.swing.JFrame {
             if (listSucursalColaborador != null) {
                 for (SucursalColaborador sucursalColaborador : listSucursalColaborador) {
                     if (sucursalColaborador.getSucursal().getNombre().equals(nombre)) {
-                        tableModelColaboradoresSeleccionados.addRow(new Object[]{sucursalColaborador.getId(), sucursalColaborador.getDistancia(), sucursalColaborador.getColaborador().getNombre(), sucursalColaborador.getColaborador().getId()});
+                        tableModelColaboradoresSucursal.addRow(new Object[]{sucursalColaborador.getId(), sucursalColaborador.getDistancia(), sucursalColaborador.getColaborador().getNombre(), sucursalColaborador.getColaborador().getId()});
 
                     }
                 }
