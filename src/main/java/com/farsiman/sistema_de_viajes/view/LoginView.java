@@ -19,9 +19,9 @@ public class LoginView extends javax.swing.JFrame {
     @Autowired
     private UsuarioController usuarioControl;
     @Autowired
-    private ApplicationContext context;
+    private ApplicationContext context; // contenedor para inyectar las clases Views dentro del contexto de Spring
     @Autowired
-    private Usuario usuarioSession;
+    private Usuario usuarioSession; 
 
     public LoginView() {
         initComponents();

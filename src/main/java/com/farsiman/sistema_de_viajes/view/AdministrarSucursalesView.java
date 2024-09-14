@@ -25,7 +25,7 @@ public class AdministrarSucursalesView extends javax.swing.JFrame {
     @Autowired
     private SucursalColaboradorController sucursalColaboradorController;
     @Autowired
-    ApplicationContext context;
+    ApplicationContext context; // contenedor para inyectar las clases Views dentro del contexto de Spring
     @Autowired
     private Usuario usuarioSession;
 
@@ -129,6 +129,10 @@ public class AdministrarSucursalesView extends javax.swing.JFrame {
         dialog.setVisible(true);
     }
 
+    private boolean validarKms(double kms) {
+        return kms > 0 && kms <= 50.00;
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -192,11 +196,6 @@ public class AdministrarSucursalesView extends javax.swing.JFrame {
         usuarioTxtField.setBackground(new java.awt.Color(51, 51, 51));
         usuarioTxtField.setForeground(new java.awt.Color(255, 255, 255));
         usuarioTxtField.setBorder(null);
-        usuarioTxtField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                usuarioTxtFieldActionPerformed(evt);
-            }
-        });
 
         usuarioLabel1.setForeground(new java.awt.Color(204, 204, 204));
         usuarioLabel1.setText("Usuario:");
@@ -589,10 +588,6 @@ public class AdministrarSucursalesView extends javax.swing.JFrame {
         reportesBtn.setBackground(new java.awt.Color(51, 51, 51));
     }//GEN-LAST:event_reportesBtnMouseExited
 
-    private void usuarioTxtFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usuarioTxtFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_usuarioTxtFieldActionPerformed
-
     private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField2ActionPerformed
@@ -613,40 +608,40 @@ public class AdministrarSucursalesView extends javax.swing.JFrame {
     private void asignarBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_asignarBtnMouseClicked
         String sucursal = sucursalSeleccionadaTxtField.getText();
         String colaborador = colaboradorSeleccionadoTxtField.getText();
-        String kmText = kmTxtField.getText(); // Capturar el texto del campo de kilómetros
-        if (usuarioSession.getRol().equals("admin")) {
-            if (kmText.isEmpty()) {
-                showMessage("Falta un campo por seleccionar", "Error", "Campos incompletos");
-            } else {
-                try {
-                    double kms = Double.parseDouble(kmText); // Intentar convertir a double
+        String kmsInput = kmTxtField.getText();
 
-                    // Validar que los kilómetros estén en el rango permitido
-                    if (kms <= 0 || kms > 50.00) {
-                        showMessage("Kms no pueden ser 0 o ser mayor a 50 kms", "Error", "Kms no valido");
-                    } else {
-                        if (!sucursal.equals("") && !colaborador.equals("")) {
-                            // Verificar si ya existe la relación entre la sucursal y el colaborador
-                            boolean existsRelation = sucursalColaboradorController.existsRelation(sucursalId, colaboradorId);
-
-                            if (existsRelation) {
-                                showMessage("La relación ya existe entre el colaborador y la sucursal", "Error", "Duplicado");
-                            } else {
-                                // Si no existe, guardar la nueva relación
-                                sucursalColaboradorController.saveRelationSucursalColaborador(sucursalId, colaboradorId, kms);
-                                showMessage("Relación asignada", "Info", "Completado");
-                            }
-                        } else {
-                            showMessage("Falta un campo", "Error", "Campos incompletos");
-                        }
-                    }
-                } catch (NumberFormatException e) {
-                    showMessage("No es un número válido", "Error", "Dato incorrecto");
-                }
-            }
-        } else {
-            showMessage("Solo el admin puede asignar una relación Colaborador - Sucursal", "Error", "No se puedo asignar relación");
+        if (!usuarioSession.getRol().equals("admin")) {
+            showMessage("Solo el admin puede asignar una relación Colaborador - Sucursal", "Error", "No se pudo asignar relación");
+            return;
         }
+
+        if (kmsInput.isEmpty() || sucursal.isEmpty() || colaborador.isEmpty()) {
+            showMessage("Falta un campo por seleccionar", "Error", "Campos incompletos");
+            return;
+        }
+
+        double kms;
+        try {
+            kms = Double.parseDouble(kmsInput); // Convertir a double
+        } catch (NumberFormatException e) {
+            showMessage("No es un número válido", "Error", "Dato incorrecto");
+            return;
+        }
+
+        if (!validarKms(kms)) {
+            showMessage("Kms no pueden ser 0 o ser mayor a 50 kms", "Error", "Kms no válido");
+            return;
+        }
+
+        if (sucursalColaboradorController.existsRelation(sucursalId, colaboradorId)) {
+            showMessage("La relación ya existe entre el colaborador y la sucursal", "Error", "Duplicado");
+            return;
+        }
+
+        // Guardar la relación si todo es válido
+        sucursalColaboradorController.saveRelationSucursalColaborador(sucursalId, colaboradorId, kms);
+        showMessage("Relación asignada", "Info", "Completado");
+
     }//GEN-LAST:event_asignarBtnMouseClicked
 
     private void registrarViajesBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_registrarViajesBtnMouseClicked
