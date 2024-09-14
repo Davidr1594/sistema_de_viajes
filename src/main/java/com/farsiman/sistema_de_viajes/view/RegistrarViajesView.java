@@ -30,15 +30,14 @@ public class RegistrarViajesView extends javax.swing.JFrame {
     @Autowired
     ViajeController viajeControl;
     @Autowired
-    ApplicationContext context;
+    ApplicationContext context; // contenedor para inyectar las clases Views dentro del contexto de Spring
     @Autowired
-    private Usuario usuarioSession;
+    private Usuario usuarioSession;// variable para manejar sesion de usuario
 
- 
-    //Variable para acumular y restringir los Kms de un viaje
+    //Se crea la variable local ya que cada ves que ocurre el evento de seleccion en la tabla de colaboradores el codigo se reinica.
     double kmsAcumulados = 0.0;
 
-    DefaultTableModel tableModel = new DefaultTableModel() {
+    DefaultTableModel tableModelColaboradoresSucursal = new DefaultTableModel() {
         @Override
         public boolean isCellEditable(int row, int column) {
             return false;
@@ -64,22 +63,21 @@ public class RegistrarViajesView extends javax.swing.JFrame {
     }
 
     private void initView() {
-        
+        //reseteo de datos para cada LogOut
         sucursalesCmb.removeAllItems();
-        configureSucursalesCmb();
-        configureTransportistasCmb();
-        configureColaboradoresTableHeader();
-        configureColaboradoresSeleccionadosTableHeader();
+        configureSucursalesComboBox();
+        configureTransportistasComboBox();
+        configureColaboradoresTableModel();
+        configureColaboradoresSeleccionadosTableModel();
 
         if (usuarioSession == null) {
-            // Manejar el caso cuando usuarioSession es null
             throw new IllegalStateException("UsuarioSession no ha sido inyectado.");
         }
         usuarioTxtField.setText(usuarioSession.getNombre());
 
     }
 
-    private void configureSucursalesCmb() {
+    private void configureSucursalesComboBox() {
         List<Sucursal> listSucursales = sucursalControl.getSucursales();
 
         for (Sucursal sucursal : listSucursales) {
@@ -87,7 +85,7 @@ public class RegistrarViajesView extends javax.swing.JFrame {
         }
     }
 
-    private void configureTransportistasCmb() {
+    private void configureTransportistasComboBox() {
         List<Transportista> listTransportistas = transportistaControl.getTransportistas();
 
         for (Transportista transportista : listTransportistas) {
@@ -95,25 +93,25 @@ public class RegistrarViajesView extends javax.swing.JFrame {
         }
     }
 
-    private void configureColaboradoresTableHeader() {
-        tableModel.setColumnCount(0);
-        tableModel.setRowCount(0);
-        
+    private void configureColaboradoresTableModel() {
+        tableModelColaboradoresSucursal.setColumnCount(0);
+        tableModelColaboradoresSucursal.setRowCount(0);
+
         JTableHeader header = colaboradoresTable.getTableHeader();
         header.setBackground(Color.gray);
         colaboradoresTable.setForeground(Color.white);
-        tableModel.addColumn("Id");
-        tableModel.addColumn("Distancia");
-        tableModel.addColumn("Colaborador nombre");
-        tableModel.addColumn("Colaborador Id");
+        tableModelColaboradoresSucursal.addColumn("Id");
+        tableModelColaboradoresSucursal.addColumn("Kms de Distancia");
+        tableModelColaboradoresSucursal.addColumn("Colaborador nombre");
+        tableModelColaboradoresSucursal.addColumn("Colaborador Id");
 
-        colaboradoresTable.setModel(tableModel);
+        colaboradoresTable.setModel(tableModelColaboradoresSucursal);
     }
 
-    private void configureColaboradoresSeleccionadosTableHeader() {
+    private void configureColaboradoresSeleccionadosTableModel() {
         tableModelColaboradoresSeleccionados.setColumnCount(0);
         tableModelColaboradoresSeleccionados.setRowCount(0);
-        
+
         JTableHeader header = colaboradoresSeleccionadostable.getTableHeader();
         header.setBackground(Color.gray);
         colaboradoresSeleccionadostable.setForeground(Color.white);
@@ -134,6 +132,98 @@ public class RegistrarViajesView extends javax.swing.JFrame {
         JDialog dialog = optionPane.createDialog(title);
         dialog.setAlwaysOnTop(true);
         dialog.setVisible(true);
+    }
+
+    private double validarKilometros(String kmsText) {
+        if (kmsText != null && !kmsText.isEmpty()) {
+            try {
+                return Double.parseDouble(kmsText);
+            } catch (NumberFormatException e) {
+                showMessage("Formato de kilómetros inválido", "Error", "Kilómetros inválido");
+                return -1;
+            }
+        } else {
+            showMessage("El campo de kilómetros está vacío", "Error", "Kilómetros inválido");
+            return -1;
+        }
+    }
+
+    private Transportista asignarTransportista() {
+        String nombreTransportista = String.valueOf(transportistaCmb.getSelectedItem());
+        if (nombreTransportista != null) {
+            return transportistaControl.getTransportista(nombreTransportista);
+        } else {
+            showMessage("No se ha seleccionado ningun transportista", "Error", "Transportista null");
+            return null;
+        }
+    }
+
+    private SucursalColaborador asignarSucursal() {
+        String nombreSucursal = String.valueOf(sucursalesCmb.getSelectedItem());
+        if (nombreSucursal != null) {
+            return sucursalColaboradorControl.getSucursalColaborador(nombreSucursal);
+        } else {
+            showMessage("No se ha seleccionado ninguna sucursal", "Error", "Sucursal null");
+            return null;
+        }
+    }
+
+    private List<Colaborador> obtenerColaboradoresSeleccionados() {
+        List<Long> listIdColaboradores = new ArrayList<>();
+        for (int i = 0; i < colaboradoresSeleccionadostable.getRowCount(); i++) {
+            Long idColaborador = (Long) colaboradoresSeleccionadostable.getValueAt(i, 0);
+            listIdColaboradores.add(idColaborador);
+        }
+        return colaboradorControl.getColaboradores(listIdColaboradores);
+    }
+
+    private boolean validarDisponibilidadTransportista(Date fecha, Transportista transportista) {
+        boolean isViajeTransportistaSameDate = viajeControl.isTransportistaAvailable(fecha, transportista);
+        if (!isViajeTransportistaSameDate) {
+            showMessage("El transportista ya tiene un viaje registrado en esta fecha", "Error", "Viaje duplicado");
+            return false;
+        }
+        return true;
+    }
+
+    private boolean validarDisponibilidadColaboradores(Date fecha, List<Colaborador> listColaboradoresTotalViaje) {
+        boolean isColaboradorInViajeSameDate = viajeControl.isColaboradorAvailable(fecha, listColaboradoresTotalViaje);
+        if (!isColaboradorInViajeSameDate) {
+            showMessage("No se puede registrar 2 viajes el mismo dia para un colaborador", "Error", "No se puedo registrar Viaje");
+            return false;
+        }
+        return true;
+    }
+
+    private void guardarViaje(Date fecha, SucursalColaborador sucursalColaborador, Transportista transportista,
+            List<Colaborador> listColaboradoresTotalViaje, double kmsTotal) {
+        boolean isViajeTrue = viajeControl.saveViaje(fecha, sucursalColaborador, transportista, listColaboradoresTotalViaje, usuarioSession, kmsTotal);
+        if (isViajeTrue) {
+            showMessage("Viaje registrado Exitosamente", "Info", "Viaje Guardado");
+        } else {
+            showMessage("Viaje no registrado", "Error", "Viaje no guardado");
+        }
+    }
+
+    private void agregarColaboradorATabla(SucursalColaborador sucursalColaborador) {
+        kmsAcumulados += sucursalColaborador.getDistancia();
+        kmTxtField.setText(String.valueOf(kmsAcumulados));
+
+        tableModelColaboradoresSeleccionados.addRow(new Object[]{
+            sucursalColaborador.getColaborador().getId(),
+            sucursalColaborador.getColaborador().getNombre(),
+            sucursalColaborador.getColaborador().getApellido()
+        });
+    }
+
+    private boolean colaboradorYaSeleccionado(Long colaboradorId) {
+        for (int i = 0; i < tableModelColaboradoresSeleccionados.getRowCount(); i++) {
+            Long idEnTabla = (Long) tableModelColaboradoresSeleccionados.getValueAt(i, 0);
+            if (colaboradorId.equals(idEnTabla)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @SuppressWarnings("unchecked")
@@ -514,12 +604,6 @@ public class RegistrarViajesView extends javax.swing.JFrame {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 logoutBtnMouseClicked(evt);
             }
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                logoutBtnMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                logoutBtnMouseExited(evt);
-            }
         });
 
         logoutLabel.setBackground(new java.awt.Color(204, 204, 204));
@@ -566,18 +650,17 @@ public class RegistrarViajesView extends javax.swing.JFrame {
 
     private void sucursalesCmbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sucursalesCmbActionPerformed
 
-
     }//GEN-LAST:event_sucursalesCmbActionPerformed
 
     private void buscaBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_buscaBtnMouseClicked
-        tableModel.setColumnCount(0);
-        tableModel.setRowCount(0);
+        tableModelColaboradoresSucursal.setColumnCount(0);
+        tableModelColaboradoresSucursal.setRowCount(0);
         tableModelColaboradoresSeleccionados.setColumnCount(0);
         tableModelColaboradoresSeleccionados.setRowCount(0);
         kmTxtField.setText("");
-        configureColaboradoresTableHeader();
-        configureColaboradoresSeleccionadosTableHeader();
-        kmsAcumulados=0.0;
+        configureColaboradoresTableModel();
+        configureColaboradoresSeleccionadosTableModel();
+        kmsAcumulados = 0.0;
 
         String nombre = String.valueOf(sucursalesCmb.getSelectedItem());
 
@@ -586,7 +669,7 @@ public class RegistrarViajesView extends javax.swing.JFrame {
             if (listSucursalColaborador != null) {
                 for (SucursalColaborador sucursalColaborador : listSucursalColaborador) {
                     if (sucursalColaborador.getSucursal().getNombre().equals(nombre)) {
-                        tableModel.addRow(new Object[]{sucursalColaborador.getId(), sucursalColaborador.getDistancia(), sucursalColaborador.getColaborador().getNombre(), sucursalColaborador.getColaborador().getId()});
+                        tableModelColaboradoresSeleccionados.addRow(new Object[]{sucursalColaborador.getId(), sucursalColaborador.getDistancia(), sucursalColaborador.getColaborador().getNombre(), sucursalColaborador.getColaborador().getId()});
 
                     }
                 }
@@ -597,7 +680,7 @@ public class RegistrarViajesView extends javax.swing.JFrame {
     private void colaboradoresTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_colaboradoresTableMouseClicked
         // Obtener el ID del colaborador seleccionado de la tabla de colaboradores
         Long colaboradorSucursalId = (Long) colaboradoresTable.getValueAt(colaboradoresTable.getSelectedRow(), 0);
-
+        final double DISTANCIA_KMS_MAX = 100.0;
         // Obtener el objeto SucursalColaborador
         SucursalColaborador sucursalColaborador = sucursalColaboradorControl.getSucursalColaboradorByIdSucursal(colaboradorSucursalId);
 
@@ -605,26 +688,12 @@ public class RegistrarViajesView extends javax.swing.JFrame {
             Long colaboradorId = sucursalColaborador.getColaborador().getId();
 
             // Verificar si el colaborador ya está en la tabla de seleccionados
-            boolean exists = false;
-            for (int i = 0; i < tableModelColaboradoresSeleccionados.getRowCount(); i++) {
-                Long idEnTabla = (Long) tableModelColaboradoresSeleccionados.getValueAt(i, 0);
-                if (colaboradorId.equals(idEnTabla)) {
-                    exists = true;
-                    break;
-                }
-            }
-
+            boolean exists = colaboradorYaSeleccionado(sucursalColaborador.getColaborador().getId());
+            
             // Si no existe, agregar a la tabla de seleccionados
             if (!exists) {
-                if ((kmsAcumulados + sucursalColaborador.getDistancia()) <= 100) {
-                    kmsAcumulados = kmsAcumulados + sucursalColaborador.getDistancia();
-                    kmTxtField.setText(String.valueOf(kmsAcumulados));
-
-                    tableModelColaboradoresSeleccionados.addRow(new Object[]{
-                        colaboradorId,
-                        sucursalColaborador.getColaborador().getNombre(),
-                        sucursalColaborador.getColaborador().getApellido()
-                    });
+                if ((kmsAcumulados + sucursalColaborador.getDistancia()) <= DISTANCIA_KMS_MAX) {
+                    agregarColaboradorATabla(sucursalColaborador);
                 } else {
                     showMessage("Este usuario acumula mas del límite de kms permitidos por viaje, kms totál del viaje no puede ser mayor a 100 kms", "Error", "No se agregó Colaborador");
                 }
@@ -681,91 +750,49 @@ public class RegistrarViajesView extends javax.swing.JFrame {
     }//GEN-LAST:event_asignarSucursalBtnMouseClicked
 
     private void registrarBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_registrarBtnMouseClicked
-         if (usuarioSession.getRol().equals("gerenteTienda")) {
+
+        if (!usuarioSession.getRol().equals("gerenteTienda")) {
+            showMessage("Solo el Gerente de Tienda pueden registrar un viaje", "Error", "No se puede crear el viaje");
+            return;
+        }
 
         Date fecha = fechaJDate.getDate();
-        SucursalColaborador sucursalColaborador = null;
-        Transportista transportista = null;
-        List<Colaborador> listColaboradoresTotalViaje = new ArrayList<Colaborador>();
-        double kmsTotal;
-
-        String kmsText = kmTxtField.getText();
-        if (kmsText != null && !kmsText.isEmpty()) {
-            kmsTotal = Double.parseDouble(kmsText);
-        } else {
-            showMessage("El campo de kilómetros está vacío", "Error", "Kilómetros inválido");
-            return;  // Salir del método si el campo es inválido
+        double kmsTotal = validarKilometros(kmTxtField.getText());
+        if (kmsTotal < 0) {
+            return; // Retorna si hay error en la validación
+        }
+        Transportista transportista = asignarTransportista();
+        if (transportista == null) {
+            return; // Retorna si hay error en la asignación
+        }
+        SucursalColaborador sucursalColaborador = asignarSucursal();
+        if (sucursalColaborador == null) {
+            return; // Retorna si hay error en la asignación
+        }
+        List<Colaborador> listColaboradoresTotalViaje = obtenerColaboradoresSeleccionados();
+        if (listColaboradoresTotalViaje.isEmpty()) {
+            showMessage("No se han seleccionado colaboradores", "Error", "Colaboradores vacíos");
+            return;
         }
 
-        // Asignar transportista
-        String nombreTransportista = String.valueOf(transportistaCmb.getSelectedItem());
-        if (nombreTransportista != null) {
-            transportista = transportistaControl.getTransportista(nombreTransportista);
-        } else {
-            showMessage("No se ha seleccionado ningun transportista", "Error", "Transportista null");
-            return; // Salir del método si no hay transportista seleccionado
+        if (!validarDisponibilidadTransportista(fecha, transportista)) {
+            return;
+        }
+        if (!validarDisponibilidadColaboradores(fecha, listColaboradoresTotalViaje)) {
+            return;
         }
 
-        // Asignar sucursal
-        String nombreSucursal = String.valueOf(sucursalesCmb.getSelectedItem());
-        if (nombreSucursal != null) {
-            sucursalColaborador = sucursalColaboradorControl.getSucursalColaborador(nombreSucursal);
-        } else {
-            showMessage("No se ha seleccionado ninguna sucursal", "Error", "Sucursal null");
-            return; // Salir del método si no hay sucursal seleccionada
-        }
-
-        // Crear lista de colaboradores seleccionados
-        List<Long> listIdColaboradores = new ArrayList<Long>();
-        for (int i = 0; i < colaboradoresSeleccionadostable.getRowCount(); i++) {
-            Long idColaborador = (Long) colaboradoresSeleccionadostable.getValueAt(i, 0);
-            listIdColaboradores.add(idColaborador);
-        }
-        listColaboradoresTotalViaje = colaboradorControl.getColaboradores(listIdColaboradores);
-
-        
-        // Verificar si ya existe un viaje para el mismo transportista en la misma fecha 
-        boolean isViajeTransportistaSameDate = viajeControl.isTransportistaAvailable(fecha, transportista);
-        if (!isViajeTransportistaSameDate) {
-            showMessage("El transportista ya tiene un viaje registrado en esta fecha", "Error", "Viaje duplicado");
-            return; // Salir del método si el transportista ya tiene un viaje
-        }
-
-        // Verificar si algún colaborador ya tiene un viaje en la misma fecha
-        boolean isColaboradorInViajeSameDate = viajeControl.isColaboradorAvailable(fecha, listColaboradoresTotalViaje);
-        if (isColaboradorInViajeSameDate) {
-            // Se asignan todas las variables a ViajeController para cargar los datos a la BD
-            boolean isViajeTrue = viajeControl.saveViaje(fecha, sucursalColaborador, transportista, listColaboradoresTotalViaje, usuarioSession, kmsTotal);
-            if (isViajeTrue) {
-                showMessage("Viaje registrado Exitosamente", "Info", "Viaje Guardado");
-            } else {
-                showMessage("Viaje no registrado", "Error", "Viaje no guardado");
-            }
-        } else {
-            showMessage("No se puede registrar 2 viajes el mismo dia para un colaborador", "Error", "No se puedo registrar Viaje");
-        }
-    } else {
-        showMessage("Solo el Gerente de Tienda pueden registrar un viaje", "Error", "No se puede crear el viaje");
-    }
+        guardarViaje(fecha, sucursalColaborador, transportista, listColaboradoresTotalViaje, kmsTotal);
 
     }//GEN-LAST:event_registrarBtnMouseClicked
 
     private void logoutBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logoutBtnMouseClicked
         usuarioSession.logOut();
-        LoginView loginView = context.getBean(LoginView.class
-        );
+        LoginView loginView = context.getBean(LoginView.class);
         loginView.setVisible(true);
         loginView.setLocationRelativeTo(null);
         this.dispose();
     }//GEN-LAST:event_logoutBtnMouseClicked
-
-    private void logoutBtnMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logoutBtnMouseEntered
-        // TODO add your handling code here:
-    }//GEN-LAST:event_logoutBtnMouseEntered
-
-    private void logoutBtnMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logoutBtnMouseExited
-        // TODO add your handling code here:
-    }//GEN-LAST:event_logoutBtnMouseExited
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel SucursalesSeleccionadosLabel;
