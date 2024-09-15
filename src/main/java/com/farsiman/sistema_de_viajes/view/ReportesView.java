@@ -486,7 +486,7 @@ public class ReportesView extends javax.swing.JFrame {
                 .addComponent(reiniciarLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        background.add(reiniciarBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 120, -1, 20));
+        background.add(reiniciarBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 120, -1, 20));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -603,7 +603,7 @@ public class ReportesView extends javax.swing.JFrame {
         fechaFinalJDate.setDate(null);
         tableModel.setColumnCount(0);
         tableModel.setRowCount(0);
-
+        totalPagarTxtField.setText("");
 
     }//GEN-LAST:event_reiniciarBtnMouseClicked
 

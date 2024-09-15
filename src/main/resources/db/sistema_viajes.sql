@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Sep 15, 2024 at 04:29 PM
+-- Generation Time: Sep 15, 2024 at 05:31 PM
 -- Server version: 8.3.0
 -- PHP Version: 8.2.18
 
@@ -185,7 +185,7 @@ CREATE TABLE IF NOT EXISTS `viajes` (
   KEY `FK7kdbbk2iv1rp0owfmagkvceeo` (`sucursal_colaborador_id`),
   KEY `FKq8s6yldong4s9ml33r546fr7y` (`transportista_id`),
   KEY `FKgoq4qi4euu9uov10eyjfct3uf` (`usuario_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
 
 --
 -- Dumping data for table `viajes`
@@ -208,7 +208,12 @@ INSERT INTO `viajes` (`id`, `distancia_total`, `fecha`, `sucursal_colaborador_id
 (20, 76, '2024-09-16 06:00:00.000000', 13, 4, 2),
 (21, 45, '2024-09-01 06:00:00.000000', 21, 2, 2),
 (22, 45, '2024-09-02 06:00:00.000000', 21, 2, 2),
-(23, 45, '2024-09-04 06:00:00.000000', 21, 2, 2);
+(23, 45, '2024-09-04 06:00:00.000000', 21, 2, 2),
+(24, 57, '2024-09-21 17:23:16.267000', 14, 3, 4),
+(25, 57, '2024-09-27 06:00:00.000000', 14, 3, 4),
+(26, 47, '2024-09-30 06:00:00.000000', 21, 4, 4),
+(27, 97, '2024-09-03 06:00:00.000000', 1, 2, 4),
+(28, 97, '2024-09-14 06:00:00.000000', 1, 2, 4);
 
 -- --------------------------------------------------------
 
@@ -314,7 +319,28 @@ INSERT INTO `viaje_colaborador` (`viaje_id`, `colaborador_id`) VALUES
 (23, 7),
 (23, 1),
 (23, 4),
-(23, 3);
+(23, 3),
+(24, 4),
+(24, 6),
+(24, 7),
+(25, 4),
+(25, 6),
+(25, 7),
+(26, 7),
+(26, 1),
+(26, 4),
+(26, 3),
+(26, 2),
+(27, 5),
+(27, 2),
+(27, 6),
+(27, 1),
+(27, 7),
+(28, 5),
+(28, 2),
+(28, 6),
+(28, 1),
+(28, 7);
 
 --
 -- Constraints for dumped tables
