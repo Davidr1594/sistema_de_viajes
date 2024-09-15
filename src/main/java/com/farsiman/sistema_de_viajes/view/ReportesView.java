@@ -52,7 +52,7 @@ public class ReportesView extends javax.swing.JFrame {
 
         configureTransportistaCmb();
         configureViajeTableHeader();
-        
+
         if (usuarioSession == null) {
             throw new IllegalStateException("UsuarioSession no ha sido inyectado.");
         }
@@ -71,7 +71,7 @@ public class ReportesView extends javax.swing.JFrame {
     private void configureViajeTableHeader() {
         tableModel.setColumnCount(0);
         tableModel.setRowCount(0);
-        
+
         JTableHeader header = reportesTable.getTableHeader();
         header.setBackground(Color.gray);
         reportesTable.setForeground(Color.white);
@@ -141,6 +141,8 @@ public class ReportesView extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         logoutBtn = new javax.swing.JPanel();
         logoutLabel = new javax.swing.JLabel();
+        reiniciarBtn = new javax.swing.JPanel();
+        reiniciarLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -416,7 +418,7 @@ public class ReportesView extends javax.swing.JFrame {
         jLabel2.setText("L.");
         background.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 340, -1, -1));
 
-        logoutBtn.setBackground(new java.awt.Color(51, 0, 0));
+        logoutBtn.setBackground(new java.awt.Color(51, 51, 51));
         logoutBtn.setForeground(new java.awt.Color(255, 255, 255));
         logoutBtn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         logoutBtn.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -434,26 +436,57 @@ public class ReportesView extends javax.swing.JFrame {
         logoutLabel.setBackground(new java.awt.Color(204, 204, 204));
         logoutLabel.setForeground(new java.awt.Color(204, 204, 204));
         logoutLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        logoutLabel.setText("LOGOUT");
+        logoutLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/iconoSalir.png"))); // NOI18N
+        logoutLabel.setText(" LogOut");
 
         javax.swing.GroupLayout logoutBtnLayout = new javax.swing.GroupLayout(logoutBtn);
         logoutBtn.setLayout(logoutBtnLayout);
         logoutBtnLayout.setHorizontalGroup(
             logoutBtnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(logoutBtnLayout.createSequentialGroup()
-                .addContainerGap()
                 .addComponent(logoutLabel)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(0, 10, Short.MAX_VALUE))
         );
         logoutBtnLayout.setVerticalGroup(
             logoutBtnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, logoutBtnLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(logoutLabel)
-                .addContainerGap())
+                .addGap(0, 2, Short.MAX_VALUE)
+                .addComponent(logoutLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        background.add(logoutBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 440, -1, -1));
+        background.add(logoutBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 430, 90, 40));
+
+        reiniciarBtn.setBackground(new java.awt.Color(51, 51, 51));
+        reiniciarBtn.setForeground(new java.awt.Color(102, 102, 102));
+        reiniciarBtn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        reiniciarBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                reiniciarBtnMouseClicked(evt);
+            }
+        });
+
+        reiniciarLabel.setFont(new java.awt.Font("Calibri Light", 1, 14)); // NOI18N
+        reiniciarLabel.setForeground(new java.awt.Color(255, 255, 255));
+        reiniciarLabel.setText("Reiniciar");
+        reiniciarLabel.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+
+        javax.swing.GroupLayout reiniciarBtnLayout = new javax.swing.GroupLayout(reiniciarBtn);
+        reiniciarBtn.setLayout(reiniciarBtnLayout);
+        reiniciarBtnLayout.setHorizontalGroup(
+            reiniciarBtnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(reiniciarBtnLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(reiniciarLabel)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        reiniciarBtnLayout.setVerticalGroup(
+            reiniciarBtnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, reiniciarBtnLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(reiniciarLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+
+        background.add(reiniciarBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 120, -1, 20));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -463,7 +496,9 @@ public class ReportesView extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(background, javax.swing.GroupLayout.PREFERRED_SIZE, 477, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(background, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 7, Short.MAX_VALUE))
         );
 
         pack();
@@ -532,7 +567,7 @@ public class ReportesView extends javax.swing.JFrame {
                 List<Viaje> listViajes = viajeControl.getViajesBetweenDate(fechaInicio, fechaFinal);
                 for (Viaje viaje : listViajes) {
                     if (viaje.getTransportista().getNombre().equals(transportistaNombre)) {
-                        tableModel.addRow(new Object[]{viaje.getId(), viaje.getTransportista().getNombre(), viaje.getSucursalColaborador().getSucursal().getNombre(), viaje.getDistanciaTotal(), viaje.getTransportista().getTarifaPorKM(), viaje.getFecha(),viaje.getUsuarioRegistro().getNombre()});
+                        tableModel.addRow(new Object[]{viaje.getId(), viaje.getTransportista().getNombre(), viaje.getSucursalColaborador().getSucursal().getNombre(), viaje.getDistanciaTotal(), viaje.getTransportista().getTarifaPorKM(), viaje.getFecha(), viaje.getUsuarioRegistro().getNombre()});
                         totalKmsAcumulados = totalKmsAcumulados + viaje.getDistanciaTotal();
                         totalPagarTxtField.setText(String.valueOf(totalKmsAcumulados * viaje.getTransportista().getTarifaPorKM()));
                     }
@@ -555,12 +590,22 @@ public class ReportesView extends javax.swing.JFrame {
     }//GEN-LAST:event_logoutBtnMouseClicked
 
     private void logoutBtnMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logoutBtnMouseEntered
-        // TODO add your handling code here:
+        logoutBtn.setBackground(new Color(100, 11, 11));
     }//GEN-LAST:event_logoutBtnMouseEntered
 
     private void logoutBtnMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logoutBtnMouseExited
-        // TODO add your handling code here:
+        logoutBtn.setBackground(new java.awt.Color(51, 51, 51));
+
     }//GEN-LAST:event_logoutBtnMouseExited
+
+    private void reiniciarBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_reiniciarBtnMouseClicked
+        fechaInicioJDate.setDate(null);
+        fechaFinalJDate.setDate(null);
+        tableModel.setColumnCount(0);
+        tableModel.setRowCount(0);
+
+
+    }//GEN-LAST:event_reiniciarBtnMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel asignarSucursalBtn;
@@ -581,6 +626,8 @@ public class ReportesView extends javax.swing.JFrame {
     private javax.swing.JLabel logoutLabel;
     private javax.swing.JPanel menuDerechoPanel;
     private javax.swing.JPanel registrarViajesBtn;
+    private javax.swing.JPanel reiniciarBtn;
+    private javax.swing.JLabel reiniciarLabel;
     private javax.swing.JPanel reportesBtn;
     private javax.swing.JLabel reportesLabel;
     private javax.swing.JTable reportesTable;

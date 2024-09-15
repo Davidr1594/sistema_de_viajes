@@ -169,6 +169,8 @@ public class AdministrarSucursalesView extends javax.swing.JFrame {
         ingresarLabel = new javax.swing.JLabel();
         logoutBtn = new javax.swing.JPanel();
         logoutLabel = new javax.swing.JLabel();
+        reiniciartBtn = new javax.swing.JPanel();
+        reiniciarLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -503,7 +505,7 @@ public class AdministrarSucursalesView extends javax.swing.JFrame {
 
         background.add(asignarBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 420, 100, 20));
 
-        logoutBtn.setBackground(new java.awt.Color(51, 0, 0));
+        logoutBtn.setBackground(new java.awt.Color(51, 51, 51));
         logoutBtn.setForeground(new java.awt.Color(255, 255, 255));
         logoutBtn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         logoutBtn.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -521,26 +523,57 @@ public class AdministrarSucursalesView extends javax.swing.JFrame {
         logoutLabel.setBackground(new java.awt.Color(204, 204, 204));
         logoutLabel.setForeground(new java.awt.Color(204, 204, 204));
         logoutLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        logoutLabel.setText("LOGOUT");
+        logoutLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/iconoSalir.png"))); // NOI18N
+        logoutLabel.setText(" LogOut");
 
         javax.swing.GroupLayout logoutBtnLayout = new javax.swing.GroupLayout(logoutBtn);
         logoutBtn.setLayout(logoutBtnLayout);
         logoutBtnLayout.setHorizontalGroup(
             logoutBtnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(logoutBtnLayout.createSequentialGroup()
-                .addContainerGap()
                 .addComponent(logoutLabel)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(0, 10, Short.MAX_VALUE))
         );
         logoutBtnLayout.setVerticalGroup(
             logoutBtnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, logoutBtnLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(logoutLabel)
-                .addContainerGap())
+                .addGap(0, 2, Short.MAX_VALUE)
+                .addComponent(logoutLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        background.add(logoutBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 440, -1, -1));
+        background.add(logoutBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 420, 90, 40));
+
+        reiniciartBtn.setBackground(new java.awt.Color(51, 51, 51));
+        reiniciartBtn.setForeground(new java.awt.Color(102, 102, 102));
+        reiniciartBtn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        reiniciartBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                reiniciartBtnMouseClicked(evt);
+            }
+        });
+
+        reiniciarLabel.setFont(new java.awt.Font("Calibri Light", 1, 14)); // NOI18N
+        reiniciarLabel.setForeground(new java.awt.Color(255, 255, 255));
+        reiniciarLabel.setText("REINICIAR");
+        reiniciarLabel.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+
+        javax.swing.GroupLayout reiniciartBtnLayout = new javax.swing.GroupLayout(reiniciartBtn);
+        reiniciartBtn.setLayout(reiniciartBtnLayout);
+        reiniciartBtnLayout.setHorizontalGroup(
+            reiniciartBtnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(reiniciartBtnLayout.createSequentialGroup()
+                .addGap(14, 14, 14)
+                .addComponent(reiniciarLabel)
+                .addContainerGap(15, Short.MAX_VALUE))
+        );
+        reiniciartBtnLayout.setVerticalGroup(
+            reiniciartBtnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, reiniciartBtnLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(reiniciarLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+
+        background.add(reiniciartBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 420, 90, 20));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -670,16 +703,21 @@ public class AdministrarSucursalesView extends javax.swing.JFrame {
         loginView.setVisible(true);
         loginView.setLocationRelativeTo(null);
         this.dispose();
-
     }//GEN-LAST:event_logoutBtnMouseClicked
 
     private void logoutBtnMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logoutBtnMouseEntered
-        // TODO add your handling code here:
+        logoutBtn.setBackground(new Color(100, 11, 11));
     }//GEN-LAST:event_logoutBtnMouseEntered
 
     private void logoutBtnMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logoutBtnMouseExited
-        // TODO add your handling code here:
+        logoutBtn.setBackground(new java.awt.Color(51, 51, 51));
     }//GEN-LAST:event_logoutBtnMouseExited
+
+    private void reiniciartBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_reiniciartBtnMouseClicked
+        sucursalSeleccionadaTxtField.setText("");
+        colaboradorSeleccionadoTxtField.setText("");
+        kmTxtField.setText("");
+    }//GEN-LAST:event_reiniciartBtnMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel asignarBtn;
@@ -703,6 +741,8 @@ public class AdministrarSucursalesView extends javax.swing.JFrame {
     private javax.swing.JLabel logoutLabel;
     private javax.swing.JPanel menuDerechoPanel;
     private javax.swing.JPanel registrarViajesBtn;
+    private javax.swing.JLabel reiniciarLabel;
+    private javax.swing.JPanel reiniciartBtn;
     private javax.swing.JPanel reportesBtn;
     private javax.swing.JLabel reportesLabel;
     private javax.swing.JLabel sucursalSeleccionadaLabel;
