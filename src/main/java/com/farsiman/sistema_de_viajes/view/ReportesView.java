@@ -81,6 +81,7 @@ public class ReportesView extends javax.swing.JFrame {
         tableModel.addColumn("Distancia Total");
         tableModel.addColumn("tarifa por KM");
         tableModel.addColumn("Fecha de viaje");
+        tableModel.addColumn("Registrado por");
 
         reportesTable.setModel(tableModel);
 
@@ -226,7 +227,7 @@ public class ReportesView extends javax.swing.JFrame {
 
         totalPagarTxtField.setBackground(new java.awt.Color(51, 51, 51));
         totalPagarTxtField.setForeground(new java.awt.Color(255, 255, 255));
-        background.add(totalPagarTxtField, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 340, 60, 20));
+        background.add(totalPagarTxtField, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 340, 60, 20));
 
         fechaLabel2.setBackground(new java.awt.Color(255, 255, 255));
         fechaLabel2.setFont(new java.awt.Font("Calibri Light", 1, 14)); // NOI18N
@@ -410,6 +411,8 @@ public class ReportesView extends javax.swing.JFrame {
 
         background.add(buscarBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 120, -1, 20));
 
+        jLabel2.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("L.");
         background.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 340, -1, -1));
 
@@ -529,7 +532,7 @@ public class ReportesView extends javax.swing.JFrame {
                 List<Viaje> listViajes = viajeControl.getViajesBetweenDate(fechaInicio, fechaFinal);
                 for (Viaje viaje : listViajes) {
                     if (viaje.getTransportista().getNombre().equals(transportistaNombre)) {
-                        tableModel.addRow(new Object[]{viaje.getId(), viaje.getTransportista().getNombre(), viaje.getSucursalColaborador().getSucursal().getNombre(), viaje.getDistanciaTotal(), viaje.getTransportista().getTarifaPorKM(), viaje.getFecha()});
+                        tableModel.addRow(new Object[]{viaje.getId(), viaje.getTransportista().getNombre(), viaje.getSucursalColaborador().getSucursal().getNombre(), viaje.getDistanciaTotal(), viaje.getTransportista().getTarifaPorKM(), viaje.getFecha(),viaje.getUsuarioRegistro().getNombre()});
                         totalKmsAcumulados = totalKmsAcumulados + viaje.getDistanciaTotal();
                         totalPagarTxtField.setText(String.valueOf(totalKmsAcumulados * viaje.getTransportista().getTarifaPorKM()));
                     }

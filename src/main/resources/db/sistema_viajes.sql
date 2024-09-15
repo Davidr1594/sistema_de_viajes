@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Sep 13, 2024 at 10:30 PM
+-- Generation Time: Sep 15, 2024 at 04:29 PM
 -- Server version: 8.3.0
 -- PHP Version: 8.2.18
 
@@ -88,7 +88,7 @@ CREATE TABLE IF NOT EXISTS `sucursal_colaboradores` (
   PRIMARY KEY (`id`),
   KEY `FKdark70snbf3q3yo7jt0n1olia` (`colaborador_id`),
   KEY `FKi92ckh7mc0gdcd8f81xpeamsn` (`sucursal_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
 
 --
 -- Dumping data for table `sucursal_colaboradores`
@@ -98,7 +98,7 @@ INSERT INTO `sucursal_colaboradores` (`id`, `distancia`, `colaborador_id`, `sucu
 (1, 2, 1, 1),
 (2, 6, 3, 2),
 (3, 20, 2, 1),
-(4, 80, 5, 1),
+(4, 50, 5, 1),
 (5, 15, 6, 1),
 (6, 10, 7, 1),
 (7, 10, 4, 1),
@@ -114,7 +114,8 @@ INSERT INTO `sucursal_colaboradores` (`id`, `distancia`, `colaborador_id`, `sucu
 (22, 5, 1, 3),
 (23, 18, 3, 3),
 (24, 12, 4, 3),
-(25, 20, 6, 2);
+(25, 20, 6, 2),
+(26, 2, 2, 3);
 
 -- --------------------------------------------------------
 
@@ -154,7 +155,7 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
   `nombre` varchar(255) COLLATE utf8mb4_spanish_ci DEFAULT NULL,
   `rol` varchar(255) COLLATE utf8mb4_spanish_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
 
 --
 -- Dumping data for table `usuarios`
@@ -163,7 +164,8 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
 INSERT INTO `usuarios` (`id`, `contrasenia`, `nombre`, `rol`) VALUES
 (1, '1234', 'Davidr', 'admin'),
 (2, '1234', 'IDaniel03', 'gerenteTienda'),
-(3, '1234', 'Erick', 'user');
+(3, '1234', 'Erick', 'user'),
+(4, '1234', 'OscarG', 'gerenteTienda');
 
 -- --------------------------------------------------------
 
@@ -190,8 +192,6 @@ CREATE TABLE IF NOT EXISTS `viajes` (
 --
 
 INSERT INTO `viajes` (`id`, `distancia_total`, `fecha`, `sucursal_colaborador_id`, `transportista_id`, `usuario_id`) VALUES
-(4, 43, '2024-09-13 23:14:12.136000', 1, 1, 1),
-(5, 43, '2024-09-14 01:53:33.180000', 1, 2, 1),
 (7, 37, '2024-09-15 22:08:14.769000', 1, 1, 2),
 (8, 55, '2024-09-24 22:17:13.161000', 14, 1, 2),
 (9, 100, '2024-09-26 22:17:13.161000', 21, 1, 2),
@@ -240,14 +240,14 @@ INSERT INTO `viaje_colaborador` (`viaje_id`, `colaborador_id`) VALUES
 (NULL, 3),
 (NULL, 2),
 (NULL, 6),
-(4, 1),
-(4, 3),
-(4, 2),
-(4, 6),
-(5, 1),
-(5, 3),
-(5, 2),
-(5, 6),
+(NULL, 1),
+(NULL, 3),
+(NULL, 2),
+(NULL, 6),
+(NULL, 1),
+(NULL, 3),
+(NULL, 2),
+(NULL, 6),
 (NULL, 1),
 (7, 1),
 (7, 2),
