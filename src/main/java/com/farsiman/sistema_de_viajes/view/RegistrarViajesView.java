@@ -64,6 +64,7 @@ public class RegistrarViajesView extends javax.swing.JFrame {
 
     private void initView() {
         //reseteo de datos para cada LogOut
+        resetBackgroundMenuBar();
         sucursalesCmb.removeAllItems();
         configureSucursalesComboBox();
         configureTransportistasComboBox();
@@ -76,8 +77,15 @@ public class RegistrarViajesView extends javax.swing.JFrame {
         usuarioTxtField.setText(usuarioSession.getNombre());
 
     }
+      private void resetBackgroundMenuBar() {
+        asignarSucursalBtn.setBackground(new Color(51, 51, 51));
+        registrarViajesBtn.setBackground(new Color(51, 51, 51));
+        reportesBtn.setBackground(new Color(51, 51, 51));
+        logoutBtn.setBackground(new Color(51, 51, 51));
+    }
 
     private void configureSucursalesComboBox() {
+        sucursalesCmb.removeAllItems();
         List<Sucursal> listSucursales = sucursalControl.getSucursales();
 
         for (Sucursal sucursal : listSucursales) {
@@ -86,6 +94,7 @@ public class RegistrarViajesView extends javax.swing.JFrame {
     }
 
     private void configureTransportistasComboBox() {
+        transportistaCmb.removeAllItems();
         List<Transportista> listTransportistas = transportistaControl.getTransportistas();
 
         for (Transportista transportista : listTransportistas) {
@@ -724,7 +733,6 @@ public class RegistrarViajesView extends javax.swing.JFrame {
         SucursalColaborador sucursalColaborador = sucursalColaboradorControl.getSucursalColaboradorByIdSucursal(colaboradorSucursalId);
 
         if (sucursalColaborador != null) {
-            Long colaboradorId = sucursalColaborador.getColaborador().getId();
 
             // Verificar si el colaborador ya está en la tabla de seleccionados
             boolean exists = colaboradorYaSeleccionado(sucursalColaborador.getColaborador().getId());

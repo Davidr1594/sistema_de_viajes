@@ -49,7 +49,7 @@ public class ReportesView extends javax.swing.JFrame {
     }
 
     private void initView() {
-
+        resetBackgroundMenuBar();
         configureTransportistaCmb();
         configureViajeTableHeader();
 
@@ -60,7 +60,15 @@ public class ReportesView extends javax.swing.JFrame {
 
     }
 
+    private void resetBackgroundMenuBar() {
+        asignarSucursalBtn.setBackground(new Color(51, 51, 51));
+        registrarViajesBtn.setBackground(new Color(51, 51, 51));
+        reportesBtn.setBackground(new Color(51, 51, 51));
+        logoutBtn.setBackground(new Color(51, 51, 51));
+    }
+
     private void configureTransportistaCmb() {
+        transportistasCmb.removeAllItems();
         List<Transportista> listTransportistas = transportistaControl.getTransportistas();
 
         for (Transportista transportista : listTransportistas) {

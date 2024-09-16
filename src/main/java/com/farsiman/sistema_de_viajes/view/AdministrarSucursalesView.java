@@ -57,6 +57,7 @@ public class AdministrarSucursalesView extends javax.swing.JFrame {
     }
 
     private void initView() {
+        resetBackgroundMenuBar();
         configureSucursalesTableHeader();
         addSucursalesToTable();
 
@@ -68,6 +69,13 @@ public class AdministrarSucursalesView extends javax.swing.JFrame {
         }
         usuarioTxtField.setText(usuarioSession.getNombre());
 
+    }
+
+    private void resetBackgroundMenuBar() {
+        asignarSucursalBtn.setBackground(new Color(51, 51, 51));
+        registrarViajesBtn.setBackground(new Color(51, 51, 51));
+        reportesBtn.setBackground(new Color(51, 51, 51));
+        logoutBtn.setBackground(new Color(51, 51, 51));
     }
 
     private void configureSucursalesTableHeader() {
